@@ -5,7 +5,7 @@
 Roles:
  - Project Manager: Jerry
  - Designer: Kevin
- - Developpers: Faysal, Aaron, Hang
+ - Developers: Faysal, Aaron, Hang
 
 Our mission: 
 We aim to inspire people to explore new dining experiences and uncover the stories and cultures behind them, helping great local restaurants get discovered so their excellence can shine on its own.
