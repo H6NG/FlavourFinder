@@ -4,17 +4,17 @@ import { BrowserRouter as Router, Routes, Route, useLocation } from 'react-route
 
 import App from "./App.jsx"; 
 import "./App.css";
-import loginPage from "./Account/loginPage.jsx"; 
-import signUpPage from "./Account/signUpPage.jsx";
-import clientPage from "./mainPage.jsx";
+import LoginPage from "./Account/loginPage.jsx"; 
+import SignUpPage from "./Account/signUpPage.jsx";
+import ClientPage from "./mainPage.jsx";
 
 createRoot(document.getElementById("root")).render(
   <StrictMode>
     <Router>
       <Routes>
-        <Route path="/" element={<mainPage />} /> 
-        <Route path="/signup" element={<signUpPage />} />
-        <Route path="/login" element={<loginPage />} />
+        <Route path="/" element={<ClientPage />} /> 
+        <Route path="/signup" element={<SignUpPage />} />
+        <Route path="/login" element={<LoginPage />} />
         <Route path="/app" element= {<App />} />
       </Routes>
     </Router>
