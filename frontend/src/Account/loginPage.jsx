@@ -11,12 +11,12 @@ function LoginPage() {
           <input
             type="email"
             placeholder="Email"
-            className="border border-black rounded-lg px-4 py-3 bg-transparent text-sm sm:text-base focus:outline-none focus:ring-1 focus:ring-black"
+            className="border border-black rounded-lg px-4 py-3 bg-transparent text-sm sm:text-base outline-none focus:outline-none focus:ring-0 focus:border-black"
           />
           <input
             type="password"
             placeholder="Password"
-            className="border border-black rounded-lg px-4 py-3 bg-transparent text-sm sm:text-base focus:outline-none focus:ring-1 focus:ring-black"
+            className="border border-black rounded-lg px-4 py-3 bg-transparent text-sm sm:text-base outline-none focus:outline-none focus:ring-0 focus:border-black"
           />
           <button
             type="submit"
