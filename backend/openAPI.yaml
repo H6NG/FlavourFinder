@@ -1,13 +1,20 @@
 openapi: "3.0.0"
 info:
-  version: "1"
-  title: ""
-  description: ""
+  version: "1.0.0"
+  title: "Flavour Finder API Docs"
+  description: "Documentation about API for backend of the service in the openAPI 3.0.0 format"
+
+# used Tags:
+# user, rank, recommend, auth 
+
 paths:
   /api/v1/user/register:
     post:
       operationId: "registerUser"
-      description: ""
+      summary: "Register User"
+      description: "Register a new user into the system with provided credentials"
+      tags: 
+        - user
       parameters: []
       requestBody:
         content:
@@ -21,10 +28,14 @@ paths:
             application/json:
               schema:
                 type: "string"
+
   /api/v1/user/self:
     delete:
       operationId: "deleteAccount"
-      description: ""
+      summary: "Delete Account"
+      description: "Delete the account of the user that calls this"
+      tags: 
+        - user
       parameters: []
       requestBody:
         content:
@@ -42,7 +53,10 @@ paths:
         - BearerAuth: []
     get:
       operationId: "getUserSelf"
-      description: ""
+      summary: "Get Current User"
+      description: "Get the current user that calls this"
+      tags: 
+        - user
       parameters: []
       responses:
         200:
@@ -55,7 +69,10 @@ paths:
         - BearerAuth: []
     put:
       operationId: "updateUserInfo"
-      description: ""
+      summary: "Update User Info"
+      description: "Update the name and/or email of the "
+      tags: 
+        - user
       parameters: []
       requestBody:
         content:
@@ -74,7 +91,10 @@ paths:
   /api/v1/user/changepassword:
     put:
       operationId: "changePassword"
-      description: ""
+      summary: "Change Password"
+      description: "Change the current user's password"
+      tags: 
+        - user
       parameters: []
       requestBody:
         content:
@@ -93,7 +113,10 @@ paths:
   /api/v1/user/login:
     post:
       operationId: "userLogin"
-      description: ""
+      summary: "Login"
+      description: "Attempt login with the provided username and password."
+      tags: 
+        - user  
       parameters: []
       requestBody:
         content:
@@ -110,7 +133,10 @@ paths:
   /api/v1/user/logout:
     post:
       operationId: "userLogout"
-      description: ""
+      summary: "Logout"
+      description: "Logout the current user and invaliades token."
+      tags: 
+        - user
       parameters: []
       requestBody:
         content:
@@ -129,7 +155,10 @@ paths:
   /api/v1/user/refresh:
     get:
       operationId: "refreshToken"
-      description: ""
+      summary: "Refresh Token"
+      description: "Returns a new valid token and invaliades the current one"
+      tags:
+        - auth
       parameters: []
       responses:
         200:
@@ -143,7 +172,10 @@ paths:
   /api/v1/user/preferences:
     get:
       operationId: "getPreferences"
-      description: ""
+      summary: "Get Preference"
+      description: "Get the preferences of the current user"
+      tags:
+        - user
       parameters: []
       responses:
         200:
@@ -156,7 +188,10 @@ paths:
         - BearerAuth: []
     put:
       operationId: "updatePreferences"
-      description: ""
+      summary: "Update Preference"
+      description: "Update the preference of the current user"
+      tags:
+        - user
       parameters: []
       requestBody:
         content:
@@ -175,7 +210,10 @@ paths:
   /api/v1/restauraunt/recommend:
     post:
       operationId: "recommendRestaurauntUser"
-      description: ""
+      summary: "Recommend Restauraunt (User)"
+      description: "Recommends a restauraunt for a currently logged in user"
+      tags:
+        - recommend
       parameters: []
       requestBody:
         content:
@@ -194,7 +232,10 @@ paths:
   /api/v1/restauruant/recommend-guest:
     post:
       operationId: "recommendRestaurauntGuest"
-      description: ""
+      summary: "Recommend Restauraunt (Guest)"
+      description: "Recommends a restauraunt for user not logged in"
+      tags:
+        - recommend
       parameters: []
       requestBody:
         content:
@@ -211,7 +252,10 @@ paths:
   /api/v1/rank/choice:
     get:
       operationId: "getChoices"
-      description: ""
+      summary: "Fetch Choices"
+      description: "Gets the choices from the server for the user to choose from"
+      tags: 
+        - rank
       parameters: []
       responses:
         200:
@@ -222,7 +266,10 @@ paths:
                 $ref: "#/components/schemas/restaurauntChoiceOffer"
     post:
       operationId: "makeChoice"
-      description: ""
+      summary: "Send Choice"
+      description: "Sends the result of the choice by the user"
+      tags:
+        - rank
       parameters: []
       requestBody:
         content:
