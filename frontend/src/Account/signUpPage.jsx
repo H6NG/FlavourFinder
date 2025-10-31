@@ -2,8 +2,36 @@ import React from "react";
 
 function signUpPage() {
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gray-50">
-      <h1 className="text-7xl font-extrabold text-gray-900">We choose. You enjoy.</h1>
+    <div className="min-h-screen flex items-center justify-center bg-white text-black">
+      <div className="w-full max-w-md border border-black rounded-2xl p-10 shadow-lg">
+        <h1 className="text-4xl font-bold text-center mb-8 tracking-tight">
+          Sign In
+        </h1>
+        <form className="flex flex-col space-y-6">
+          <input
+            type="email"
+            placeholder="Email"
+            className="border border-black rounded-lg px-4 py-3 bg-transparent focus:outline-none focus:ring-1 focus:ring-black"
+          />
+          <input
+            type="password"
+            placeholder="Password"
+            className="border border-black rounded-lg px-4 py-3 bg-transparent focus:outline-none focus:ring-1 focus:ring-black"
+          />
+          <button
+            type="submit"
+            className="border border-black rounded-lg py-3 font-semibold hover:bg-black hover:text-white transition"
+          >
+            Sign In
+          </button>
+        </form>
+        <p className="text-center text-sm mt-8">
+          Have an account?{" "}
+          <a href="/signup" className="underline hover:opacity-70">
+            Login
+          </a>
+        </p>
+      </div>
     </div>
   );
 }
