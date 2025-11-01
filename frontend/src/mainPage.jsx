@@ -1,11 +1,20 @@
 import React from "react";
 import { Link } from "react-router-dom";
 
-function ClientPage() {
+export default function ClientPage() {
   return (
     <div className="min-h-screen bg-white text-black flex flex-col font-[Inter] relative">
       
       <header className="hidden sm:flex w-full justify-end p-6">
+        <div className="flex items-center space-x-2">
+          <Link
+            to="/"
+            className="text-lg sm:text-xl font-bold tracking-tight hover:text-gray-700 transition-all"
+          >
+            FlavourFinder
+          </Link>
+          <img src="../images/logo.png" alt="FlavourFinder Logo" className="w-8 h-8 object-contain"/>
+        </div>
         <div className="flex space-x-4">
           <Link
             to="/signup"
@@ -33,11 +42,9 @@ function ClientPage() {
           to="/login"
           className="w-[90%] max-w-sm bg-black text-white text-center py-3 rounded-lg font-medium font-mono transition"
         >
-          Connect
+          Connect / Sign up
         </Link>
       </div>
     </div>
   );
 }
-
-export default ClientPage;
