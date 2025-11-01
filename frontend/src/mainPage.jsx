@@ -33,7 +33,7 @@ export default function ClientPage() {
       <header className="flex sm:hidden w-full justify-center items-center p-4 space-x-2">
         <Link
           to="/"
-          className="text-xl font-bold font-sans tracking-tight transition-all"
+          className="text-2xl font-bold font-sans tracking-tight transition-all"
         >
           FlavourFinder
         </Link>
@@ -50,11 +50,6 @@ export default function ClientPage() {
         </h1>
       </main>
 
-      <div className="sm:hidden flex items-center justify-center pt-12">
-        <h1 className="text-3xl font-mono font-semibold tracking-tight">
-          Flavour <span className="text-green-500">Finder</span>
-        </h1>
-      </div>
       <div className="sm:hidden fixed bottom-0 left-0 w-full bg-white border-t border-gray-200 py-4 flex justify-center">
         <Link
           to="/login"
