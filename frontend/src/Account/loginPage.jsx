@@ -20,7 +20,7 @@ function LoginPage() {
           />
           <button
             type="submit"
-            className="border border-black rounded-lg py-3 font-semibold text-sm sm:text-base hover:bg-black hover:text-white transition"
+            className="border border-black rounded-lg py-3 font-semibold text-sm sm:text-base hover:bg-black hover:text-white transition cursor-pointer"
           >
             Connect
           </button>

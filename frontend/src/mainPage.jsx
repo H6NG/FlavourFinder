@@ -30,6 +30,7 @@ export default function ClientPage() {
           </Link>
         </div>
       </header>
+
       <header className="flex sm:hidden w-full justify-center items-center p-4 space-x-2">
         <Link
           to="/"
@@ -45,10 +46,19 @@ export default function ClientPage() {
       </header>
 
       <main className="flex-grow flex flex-col items-center justify-center text-center px-6">
+        <div className="hidden sm:block w-full h-52"></div>
         <h1 className="text-3xl sm:text-5xl md:text-6xl font-semibold tracking-tight leading-tight max-w-3xl">
           We choose<span className="text-green-800">.</span> You enjoy<span className="text-green-800">.</span>
         </h1>
+        <div className="hidden sm:block w-full h-90"></div>
       </main>
+      
+      <footer className="hidden sm:flex w-full justify-center items-center py-6 h-50 bg-green-800 text-white rounded-t-3xl">
+        <p className="text-center text-sm font-mono">
+          © {new Date().getFullYear()} FlavourFinder. All rights reserved.<br/>
+          Engineered by Faysal Ariss, Jerry Chen, Hang Liu, Aaron Zhao and Kevin Zhu
+        </p>
+      </footer>
 
       <div className="sm:hidden fixed bottom-0 left-0 w-full bg-white border-t border-gray-200 py-4 flex justify-center">
         <Link
@@ -59,5 +69,6 @@ export default function ClientPage() {
         </Link>
       </div>
     </div>
+    
   );
 }
