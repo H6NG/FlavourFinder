@@ -31,17 +31,17 @@ export default function ClientPage() {
         </div>
       </header>
       <header className="flex sm:hidden w-full justify-center items-center p-4 space-x-2">
-        <img
-          src="./images/logo.png"
-          alt="FlavourFinder logo"
-          className="w-8 h-8 object-contain"
-        />
         <Link
           to="/"
-          className="text-lg font-bold font-sans tracking-tight transition-all"
+          className="text-3xl font-bold font-sans tracking-tight transition-all"
         >
           FlavourFinder
         </Link>
+        <img
+          src="./images/logo.png"
+          alt="FlavourFinder logo"
+          className="w-10 h-10 object-contain"
+        />
       </header>
 
       <main className="flex-grow flex flex-col items-center justify-center text-center px-6">
