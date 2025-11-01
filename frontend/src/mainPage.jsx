@@ -6,7 +6,7 @@ export default function ClientPage() {
   return (
     <div className="min-h-screen bg-white text-black flex flex-col font-[Inter] relative">
       
-      <header className="hidden sm:flex w-full justify-between p-6">
+      <header className="hidden sm:flex w-full items-center justify-between p-6">
         <div className="flex items-center space-x-2">
           <Link
             to="/"
@@ -38,6 +38,11 @@ export default function ClientPage() {
         </h1>
       </main>
 
+      <div className="sm:hidden flex items-center justify-center pt-12">
+        <h1 className="text-3xl font-mono font-semibold tracking-tight">
+          Flavour <span className="text-green-500">Finder</span>
+        </h1>
+      </div>
       <div className="sm:hidden fixed bottom-0 left-0 w-full bg-white border-t border-gray-200 py-4 flex justify-center">
         <Link
           to="/login"
