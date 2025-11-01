@@ -27,7 +27,7 @@ function signUpPage() {
         </form>
         <p className="text-center text-sm mt-8">
           Have an account?{" "}
-          <a href="/signup" className="underline hover:opacity-70">
+          <a href="/login" className="underline hover:opacity-70">
             Login
           </a>
         </p>
