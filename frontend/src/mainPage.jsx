@@ -1,6 +1,5 @@
 import React from "react";
 import { Link } from "react-router-dom";
-import logo from "/images/logo.png";
 
 export default function ClientPage() {
   return (
@@ -14,7 +13,7 @@ export default function ClientPage() {
           >
             FlavourFinder
           </Link>
-          <img src={logo} alt="FlavourFinder Logo" className="w-8 h-8 object-contain"/>
+          <img src="./images/logo.png" alt="FlavourFinder Logo" className="w-8 h-8 object-contain"/>
         </div>
         <div className="flex space-x-4">
           <Link
