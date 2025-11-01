@@ -31,7 +31,7 @@ function ClientPage() {
       <div className="sm:hidden fixed bottom-0 left-0 w-full bg-white border-t border-gray-200 py-4 flex justify-center">
         <Link
           to="/login"
-          className="w-[90%] max-w-sm bg-black text-white text-center py-3 rounded-lg font-medium hover:opacity-80 transition"
+          className="w-[90%] max-w-sm bg-black text-white text-center py-3 rounded-lg font-medium font-mono transition"
         >
           Connect
         </Link>
