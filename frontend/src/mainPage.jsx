@@ -33,14 +33,14 @@ export default function ClientPage() {
       <header className="flex sm:hidden w-full justify-center items-center p-4 space-x-2">
         <Link
           to="/"
-          className="text-3xl font-bold font-sans tracking-tight transition-all"
+          className="text-xl font-bold font-sans tracking-tight transition-all"
         >
           FlavourFinder
         </Link>
         <img
           src="./images/logo.png"
           alt="FlavourFinder logo"
-          className="w-10 h-10 object-contain"
+          className="w-9 h-9 object-contain"
         />
       </header>
 
