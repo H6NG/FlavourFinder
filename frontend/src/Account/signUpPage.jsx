@@ -1,6 +1,6 @@
 import React from "react";
 
-export default function signupPage() {
+export default function SignUpPage() {
   return (
     <div className="min-h-screen flex items-center justify-center bg-white text-black px-4">
       <div className="w-full max-w-sm sm:max-w-md border border-black rounded-2xl p-6 sm:p-10 shadow-lg">
