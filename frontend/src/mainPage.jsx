@@ -13,7 +13,7 @@ export default function ClientPage() {
           >
             FlavourFinder
           </Link>
-          <img src="/src/images/logo.png" alt="FlavourFinder Logo" className="w-20 h-20 object-contain"/>
+          <img src="/images/logo.png" alt="FlavourFinder Logo" className="w-20 h-20 object-contain"/>
         </div>
         <div className="flex space-x-4">
           <Link
@@ -29,6 +29,19 @@ export default function ClientPage() {
             Login
           </Link>
         </div>
+      </header>
+      <header className="flex sm:hidden w-full justify-center items-center p-4 space-x-2">
+        <img
+          src="/images/logo.png"
+          alt="FlavourFinder logo"
+          className="w-8 h-8 object-contain"
+        />
+        <Link
+          to="/"
+          className="text-lg font-bold font-sans tracking-tight transition-all"
+        >
+          FlavourFinder
+        </Link>
       </header>
 
       <main className="flex-grow flex flex-col items-center justify-center text-center px-6">
