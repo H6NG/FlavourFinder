@@ -1,18 +1,32 @@
 import React from "react";
+import { Link } from "react-router-dom";
 
 function ClientPage() {
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gray-50">
-      <h1 className="text-7xl font-extrabold text-gray-900">We choose. You enjoy.</h1>
+    <div className="min-h-screen bg-white text-black flex flex-col">
+      
+      <header className="w-full flex justify-start p-6">
+        <div className="flex space-x-4">
+          <Link
+            to="/signup"
+            className="px-5 py-2 border border-black rounded-lg font-medium hover:bg-black hover:text-white transition-all duration-200"
+          >
+            Sign Up
+          </Link>
+          <Link
+            to="/login"
+            className="px-5 py-2 border border-black rounded-lg font-medium hover:bg-black hover:text-white transition-all duration-200"
+          >
+            Login
+          </Link>
+        </div>
+      </header>
 
-      <div className="flex space-x-4">
-        <button className="px-6 py-3 bg-blue-600 text-white rounded-xl shadow-md hover:bg-blue-700 transition">
-        Sign Up
-        </button>
-        <button className="px-6 py-3 bg-gray-200 text-gray-900 rounded-xl shadow-md hover:bg-gray-300 transition">
-        Login
-        </button>
-      </div>
+      <main className="flex-grow flex items-center justify-center">
+        <h1 className="text-7xl font-extrabold text-center tracking-tight">
+          We choose. You enjoy.
+        </h1>
+      </main>
     </div>
   );
 }
