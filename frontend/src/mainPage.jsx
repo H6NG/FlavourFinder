@@ -9,11 +9,11 @@ export default function ClientPage() {
         <div className="flex items-center space-x-2">
           <Link
             to="/"
-            className="text-lg sm:text-xl font-bold font-serif tracking-tight hover:text-gray-700 transition-all"
+            className="text-lg sm:text-3xl font-bold font-sans tracking-tight transition-all"
           >
             FlavourFinder
           </Link>
-          <img src="../images/logo.png" alt="FlavourFinder Logo" className="w-8 h-8 object-contain"/>
+          <img src="/src/images/logo.png" alt="FlavourFinder Logo" className="w-20 h-20 object-contain"/>
         </div>
         <div className="flex space-x-4">
           <Link
