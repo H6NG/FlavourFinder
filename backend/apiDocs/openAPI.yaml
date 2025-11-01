@@ -23,11 +23,7 @@ paths:
               $ref: "#/components/schemas/userNew"
       responses:
         204:
-          description: "Success - no content"
-          content:
-            application/json:
-              schema:
-                type: "string"
+          description: "success - no content"
 
   /api/v1/user/self:
     delete:
@@ -44,11 +40,8 @@ paths:
               type: "string"
       responses:
         204:
-          description: "success"
-          content:
-            application/json:
-              schema:
-                type: "string"
+          description: "success - no content"
+
       security:
         - BearerAuth: []
     get:
@@ -146,10 +139,6 @@ paths:
       responses:
         204:
           description: "no content"
-          content:
-            application/json:
-              schema:
-                type: "string"
       security:
         - BearerAuth: []
   /api/v1/user/refresh:
@@ -200,11 +189,7 @@ paths:
               $ref: "#/components/schemas/userPreferences"
       responses:
         204:
-          description: ""
-          content:
-            application/json:
-              schema:
-                type: "string"
+          description: "success - no content"
       security:
         - BearerAuth: []
   /api/v1/restauraunt/recommend:
@@ -219,7 +204,7 @@ paths:
         content:
           application/json:
             schema:
-              $ref: "#/components/schemas/location"
+              $ref: "#/components/schemas/restaurauntRequest"
       responses:
         200:
           description: ""
@@ -241,7 +226,7 @@ paths:
         content:
           application/json:
             schema:
-              $ref: "#/components/schemas/location"
+              $ref: "#/components/schemas/restaurauntRequest"
       responses:
         200:
           description: ""
@@ -403,5 +388,13 @@ components:
           nullable: false
           type: "number"
         longitude:
+          nullable: false
+          type: "number"
+    restaurauntRequest:
+      properties:
+        currentLocation:
+          nullable: false
+          $ref: "#/components/schemas/location"
+        radius:
           nullable: false
           type: "number"
