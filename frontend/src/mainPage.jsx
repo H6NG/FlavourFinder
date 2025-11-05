@@ -1,6 +1,8 @@
 import React from "react";
 import { Link } from "react-router-dom";
 
+// MainPage is the place where all users and none-users land on the first time they are on the website;
+
 export default function ClientPage() {
   return (
     <div className="min-h-screen bg-white text-black flex flex-col font-[Inter] relative">
