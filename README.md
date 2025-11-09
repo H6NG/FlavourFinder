@@ -13,3 +13,5 @@ We aim to inspire people to explore new dining experiences and uncover the stori
 [Our problem & solution](DesignSpecs.md)
 
 [Requirements](requirements.md)
+
+[Plan](Plan.md)
