@@ -897,7 +897,7 @@ ul.nav-tabs {
 };
     defs["restaurauntChoiceOffer"] = {
   "properties" : {
-    "restauruantA" : {
+    "restaurauntA" : {
       "$ref" : "#/components/schemas/restauraunt"
     },
     "restaurauntB" : {
@@ -915,15 +915,15 @@ ul.nav-tabs {
     defs["restaurauntChoiceResponse"] = {
   "properties" : {
     "choiceA" : {
-      "type" : "boolean",
+      "type" : "number",
       "nullable" : false
     },
     "choiceB" : {
-      "type" : "boolean",
+      "type" : "number",
       "nullable" : false
     },
     "choiceC" : {
-      "type" : "boolean",
+      "type" : "number",
       "nullable" : false
     },
     "offeringID" : {
@@ -940,6 +940,20 @@ ul.nav-tabs {
     "radius" : {
       "type" : "number",
       "nullable" : false
+    }
+  }
+};
+    defs["restaurauntRequestGuest"] = {
+  "properties" : {
+    "currentLocation" : {
+      "$ref" : "#/components/schemas/location"
+    },
+    "radius" : {
+      "type" : "number",
+      "nullable" : false
+    },
+    "preferences" : {
+      "$ref" : "#/components/schemas/userPreferences"
     }
   }
 };
@@ -991,7 +1005,7 @@ ul.nav-tabs {
     }
   }
 };
-    defs["userPassswordChange"] = {
+    defs["userPasswordChange"] = {
   "properties" : {
     "current" : {
       "type" : "string",
@@ -1116,7 +1130,7 @@ ul.nav-tabs {
                         <div class="pull-right"></div>
                         <div class="clearfix"></div>
                         <p></p>
-                        <p class="marked">Returns a new valid token and invaliades the current one</p>
+                        <p class="marked">Returns a new valid token and invalidates the current one</p>
                         <p></p>
                         <br />
                         <pre class="prettyprint language-html prettyprinted" data-type="get"><code><span class="pln">/api/v1/user/refresh</span></code></pre>
@@ -2196,7 +2210,7 @@ $(document).ready(function() {
                         <p class="marked">Recommends a restauraunt for user not logged in</p>
                         <p></p>
                         <br />
-                        <pre class="prettyprint language-html prettyprinted" data-type="post"><code><span class="pln">/api/v1/restauruant/recommend-guest</span></code></pre>
+                        <pre class="prettyprint language-html prettyprinted" data-type="post"><code><span class="pln">/api/v1/restauraunt/recommend-guest</span></code></pre>
                         <p>
                           <h3>Usage and SDK Samples</h3>
                         </p>
@@ -2221,7 +2235,7 @@ $(document).ready(function() {
                             <pre class="prettyprint"><code class="language-bsh">curl -X POST \
  -H "Accept: application/json" \
  -H "Content-Type: application/json" \
- "http://localhost/api/v1/restauruant/recommend-guest" \
+ "http://localhost/api/v1/restauraunt/recommend-guest" \
  -d ''
 </code></pre>
                           </div>
@@ -2239,10 +2253,10 @@ public class RecommendApiExample {
 
         // Create an instance of the API class
         RecommendApi apiInstance = new RecommendApi();
-        RestaurauntRequest restaurauntRequest = ; // RestaurauntRequest | 
+        RestaurauntRequestGuest restaurauntRequestGuest = ; // RestaurauntRequestGuest | 
 
         try {
-            restauraunt result = apiInstance.recommendRestaurauntGuest(restaurauntRequest);
+            restauraunt result = apiInstance.recommendRestaurauntGuest(restaurauntRequestGuest);
             System.out.println(result);
         } catch (ApiException e) {
             System.err.println("Exception when calling RecommendApi#recommendRestaurauntGuest");
@@ -2258,10 +2272,10 @@ public class RecommendApiExample {
 
 final api_instance = DefaultApi();
 
-final RestaurauntRequest restaurauntRequest = new RestaurauntRequest(); // RestaurauntRequest | 
+final RestaurauntRequestGuest restaurauntRequestGuest = new RestaurauntRequestGuest(); // RestaurauntRequestGuest | 
 
 try {
-    final result = await api_instance.recommendRestaurauntGuest(restaurauntRequest);
+    final result = await api_instance.recommendRestaurauntGuest(restaurauntRequestGuest);
     print(result);
 } catch (e) {
     print('Exception when calling DefaultApi->recommendRestaurauntGuest: $e\n');
@@ -2276,10 +2290,10 @@ try {
 public class RecommendApiExample {
     public static void main(String[] args) {
         RecommendApi apiInstance = new RecommendApi();
-        RestaurauntRequest restaurauntRequest = ; // RestaurauntRequest | 
+        RestaurauntRequestGuest restaurauntRequestGuest = ; // RestaurauntRequestGuest | 
 
         try {
-            restauraunt result = apiInstance.recommendRestaurauntGuest(restaurauntRequest);
+            restauraunt result = apiInstance.recommendRestaurauntGuest(restaurauntRequestGuest);
             System.out.println(result);
         } catch (ApiException e) {
             System.err.println("Exception when calling RecommendApi#recommendRestaurauntGuest");
@@ -2297,10 +2311,10 @@ public class RecommendApiExample {
 
 // Create an instance of the API class
 RecommendApi *apiInstance = [[RecommendApi alloc] init];
-RestaurauntRequest *restaurauntRequest = ; //  (optional)
+RestaurauntRequestGuest *restaurauntRequestGuest = ; //  (optional)
 
 // Recommend Restauraunt (Guest)
-[apiInstance recommendRestaurauntGuestWith:restaurauntRequest
+[apiInstance recommendRestaurauntGuestWith:restaurauntRequestGuest
               completionHandler: ^(restauraunt output, NSError* error) {
     if (output) {
         NSLog(@"%@", output);
@@ -2318,7 +2332,7 @@ RestaurauntRequest *restaurauntRequest = ; //  (optional)
 // Create an instance of the API class
 var api = new FlavourFinderApiDocs.RecommendApi()
 var opts = {
-  'restaurauntRequest':  // {RestaurauntRequest} 
+  'restaurauntRequestGuest':  // {RestaurauntRequestGuest} 
 };
 
 var callback = function(error, data, response) {
@@ -2351,11 +2365,11 @@ namespace Example
 
             // Create an instance of the API class
             var apiInstance = new RecommendApi();
-            var restaurauntRequest = new RestaurauntRequest(); // RestaurauntRequest |  (optional) 
+            var restaurauntRequestGuest = new RestaurauntRequestGuest(); // RestaurauntRequestGuest |  (optional) 
 
             try {
                 // Recommend Restauraunt (Guest)
-                restauraunt result = apiInstance.recommendRestaurauntGuest(restaurauntRequest);
+                restauraunt result = apiInstance.recommendRestaurauntGuest(restaurauntRequestGuest);
                 Debug.WriteLine(result);
             } catch (Exception e) {
                 Debug.Print("Exception when calling RecommendApi.recommendRestaurauntGuest: " + e.Message );
@@ -2372,10 +2386,10 @@ require_once(__DIR__ . '/vendor/autoload.php');
 
 // Create an instance of the API class
 $api_instance = new OpenAPITools\Client\Api\RecommendApi();
-$restaurauntRequest = ; // RestaurauntRequest | 
+$restaurauntRequestGuest = ; // RestaurauntRequestGuest | 
 
 try {
-    $result = $api_instance->recommendRestaurauntGuest($restaurauntRequest);
+    $result = $api_instance->recommendRestaurauntGuest($restaurauntRequestGuest);
     print_r($result);
 } catch (Exception $e) {
     echo 'Exception when calling RecommendApi->recommendRestaurauntGuest: ', $e->getMessage(), PHP_EOL;
@@ -2390,10 +2404,10 @@ use WWW::OPenAPIClient::RecommendApi;
 
 # Create an instance of the API class
 my $api_instance = WWW::OPenAPIClient::RecommendApi->new();
-my $restaurauntRequest = WWW::OPenAPIClient::Object::RestaurauntRequest->new(); # RestaurauntRequest | 
+my $restaurauntRequestGuest = WWW::OPenAPIClient::Object::RestaurauntRequestGuest->new(); # RestaurauntRequestGuest | 
 
 eval {
-    my $result = $api_instance->recommendRestaurauntGuest(restaurauntRequest => $restaurauntRequest);
+    my $result = $api_instance->recommendRestaurauntGuest(restaurauntRequestGuest => $restaurauntRequestGuest);
     print Dumper($result);
 };
 if ($@) {
@@ -2410,11 +2424,11 @@ from pprint import pprint
 
 # Create an instance of the API class
 api_instance = openapi_client.RecommendApi()
-restaurauntRequest =  # RestaurauntRequest |  (optional)
+restaurauntRequestGuest =  # RestaurauntRequestGuest |  (optional)
 
 try:
     # Recommend Restauraunt (Guest)
-    api_response = api_instance.recommend_restauraunt_guest(restaurauntRequest=restaurauntRequest)
+    api_response = api_instance.recommend_restauraunt_guest(restaurauntRequestGuest=restaurauntRequestGuest)
     pprint(api_response)
 except ApiException as e:
     print("Exception when calling RecommendApi->recommendRestaurauntGuest: %s\n" % e)</code></pre>
@@ -2424,10 +2438,10 @@ except ApiException as e:
                               <pre class="prettyprint"><code class="language-rust">extern crate RecommendApi;
 
 pub fn main() {
-    let restaurauntRequest = ; // RestaurauntRequest
+    let restaurauntRequestGuest = ; // RestaurauntRequestGuest
 
     let mut context = RecommendApi::Context::default();
-    let result = client.recommendRestaurauntGuest(restaurauntRequest, &context).wait();
+    let result = client.recommendRestaurauntGuest(restaurauntRequestGuest, &context).wait();
 
     println!("{:?}", result);
 }
@@ -2450,7 +2464,7 @@ pub fn main() {
                                 <th width="150px">Name</th>
                                 <th>Description</th>
                               </tr>
-                                <tr><td style="width:150px;">restaurauntRequest </td>
+                                <tr><td style="width:150px;">restaurauntRequestGuest </td>
 <td>
 <p class="marked"></p>
 <script>
@@ -2459,7 +2473,7 @@ $(document).ready(function() {
   "content" : {
     "application/json" : {
       "schema" : {
-        "$ref" : "#/components/schemas/restaurauntRequest"
+        "$ref" : "#/components/schemas/restaurauntRequestGuest"
       }
     }
   }
@@ -2481,12 +2495,12 @@ $(document).ready(function() {
   }
 
   var view = new JSONSchemaView(schema,2,{isBodyParam: true});
-  var result = $('#d2e199_recommendRestaurauntGuest_restaurauntRequest');
+  var result = $('#d2e199_recommendRestaurauntGuest_restaurauntRequestGuest');
   result.empty();
   result.append(view.render());
 });
 </script>
-<div id="d2e199_recommendRestaurauntGuest_restaurauntRequest"></div>
+<div id="d2e199_recommendRestaurauntGuest_restaurauntRequestGuest"></div>
 </td>
 </tr>
 
@@ -3053,10 +3067,10 @@ public class UserApiExample {
 
         // Create an instance of the API class
         UserApi apiInstance = new UserApi();
-        UserPassswordChange userPassswordChange = ; // UserPassswordChange | 
+        UserPasswordChange userPasswordChange = ; // UserPasswordChange | 
 
         try {
-            'String' result = apiInstance.changePassword(userPassswordChange);
+            'String' result = apiInstance.changePassword(userPasswordChange);
             System.out.println(result);
         } catch (ApiException e) {
             System.err.println("Exception when calling UserApi#changePassword");
@@ -3072,10 +3086,10 @@ public class UserApiExample {
 
 final api_instance = DefaultApi();
 
-final UserPassswordChange userPassswordChange = new UserPassswordChange(); // UserPassswordChange | 
+final UserPasswordChange userPasswordChange = new UserPasswordChange(); // UserPasswordChange | 
 
 try {
-    final result = await api_instance.changePassword(userPassswordChange);
+    final result = await api_instance.changePassword(userPasswordChange);
     print(result);
 } catch (e) {
     print('Exception when calling DefaultApi->changePassword: $e\n');
@@ -3090,10 +3104,10 @@ try {
 public class UserApiExample {
     public static void main(String[] args) {
         UserApi apiInstance = new UserApi();
-        UserPassswordChange userPassswordChange = ; // UserPassswordChange | 
+        UserPasswordChange userPasswordChange = ; // UserPasswordChange | 
 
         try {
-            'String' result = apiInstance.changePassword(userPassswordChange);
+            'String' result = apiInstance.changePassword(userPasswordChange);
             System.out.println(result);
         } catch (ApiException e) {
             System.err.println("Exception when calling UserApi#changePassword");
@@ -3114,10 +3128,10 @@ public class UserApiExample {
 
 // Create an instance of the API class
 UserApi *apiInstance = [[UserApi alloc] init];
-UserPassswordChange *userPassswordChange = ; //  (optional)
+UserPasswordChange *userPasswordChange = ; //  (optional)
 
 // Change Password
-[apiInstance changePasswordWith:userPassswordChange
+[apiInstance changePasswordWith:userPasswordChange
               completionHandler: ^('String' output, NSError* error) {
     if (output) {
         NSLog(@"%@", output);
@@ -3140,7 +3154,7 @@ BearerAuth.accessToken = "YOUR ACCESS TOKEN";
 // Create an instance of the API class
 var api = new FlavourFinderApiDocs.UserApi()
 var opts = {
-  'userPassswordChange':  // {UserPassswordChange} 
+  'userPasswordChange':  // {UserPasswordChange} 
 };
 
 var callback = function(error, data, response) {
@@ -3175,11 +3189,11 @@ namespace Example
 
             // Create an instance of the API class
             var apiInstance = new UserApi();
-            var userPassswordChange = new UserPassswordChange(); // UserPassswordChange |  (optional) 
+            var userPasswordChange = new UserPasswordChange(); // UserPasswordChange |  (optional) 
 
             try {
                 // Change Password
-                'String' result = apiInstance.changePassword(userPassswordChange);
+                'String' result = apiInstance.changePassword(userPasswordChange);
                 Debug.WriteLine(result);
             } catch (Exception e) {
                 Debug.Print("Exception when calling UserApi.changePassword: " + e.Message );
@@ -3199,10 +3213,10 @@ OpenAPITools\Client\Configuration::getDefaultConfiguration()->setAccessToken('',
 
 // Create an instance of the API class
 $api_instance = new OpenAPITools\Client\Api\UserApi();
-$userPassswordChange = ; // UserPassswordChange | 
+$userPasswordChange = ; // UserPasswordChange | 
 
 try {
-    $result = $api_instance->changePassword($userPassswordChange);
+    $result = $api_instance->changePassword($userPasswordChange);
     print_r($result);
 } catch (Exception $e) {
     echo 'Exception when calling UserApi->changePassword: ', $e->getMessage(), PHP_EOL;
@@ -3220,10 +3234,10 @@ $WWW::OPenAPIClient::Configuration::access_token = 'YOUR_ACCESS_TOKEN';
 
 # Create an instance of the API class
 my $api_instance = WWW::OPenAPIClient::UserApi->new();
-my $userPassswordChange = WWW::OPenAPIClient::Object::UserPassswordChange->new(); # UserPassswordChange | 
+my $userPasswordChange = WWW::OPenAPIClient::Object::UserPasswordChange->new(); # UserPasswordChange | 
 
 eval {
-    my $result = $api_instance->changePassword(userPassswordChange => $userPassswordChange);
+    my $result = $api_instance->changePassword(userPasswordChange => $userPasswordChange);
     print Dumper($result);
 };
 if ($@) {
@@ -3243,11 +3257,11 @@ openapi_client.configuration.access_token = 'YOUR_ACCESS_TOKEN'
 
 # Create an instance of the API class
 api_instance = openapi_client.UserApi()
-userPassswordChange =  # UserPassswordChange |  (optional)
+userPasswordChange =  # UserPasswordChange |  (optional)
 
 try:
     # Change Password
-    api_response = api_instance.change_password(userPassswordChange=userPassswordChange)
+    api_response = api_instance.change_password(userPasswordChange=userPasswordChange)
     pprint(api_response)
 except ApiException as e:
     print("Exception when calling UserApi->changePassword: %s\n" % e)</code></pre>
@@ -3257,10 +3271,10 @@ except ApiException as e:
                               <pre class="prettyprint"><code class="language-rust">extern crate UserApi;
 
 pub fn main() {
-    let userPassswordChange = ; // UserPassswordChange
+    let userPasswordChange = ; // UserPasswordChange
 
     let mut context = UserApi::Context::default();
-    let result = client.changePassword(userPassswordChange, &context).wait();
+    let result = client.changePassword(userPasswordChange, &context).wait();
 
     println!("{:?}", result);
 }
@@ -3283,7 +3297,7 @@ pub fn main() {
                                 <th width="150px">Name</th>
                                 <th>Description</th>
                               </tr>
-                                <tr><td style="width:150px;">userPassswordChange </td>
+                                <tr><td style="width:150px;">userPasswordChange </td>
 <td>
 <p class="marked"></p>
 <script>
@@ -3292,7 +3306,7 @@ $(document).ready(function() {
   "content" : {
     "application/json" : {
       "schema" : {
-        "$ref" : "#/components/schemas/userPassswordChange"
+        "$ref" : "#/components/schemas/userPasswordChange"
       }
     }
   }
@@ -3314,12 +3328,12 @@ $(document).ready(function() {
   }
 
   var view = new JSONSchemaView(schema,2,{isBodyParam: true});
-  var result = $('#d2e199_changePassword_userPassswordChange');
+  var result = $('#d2e199_changePassword_userPasswordChange');
   result.empty();
   result.append(view.render());
 });
 </script>
-<div id="d2e199_changePassword_userPassswordChange"></div>
+<div id="d2e199_changePassword_userPasswordChange"></div>
 </td>
 </tr>
 
