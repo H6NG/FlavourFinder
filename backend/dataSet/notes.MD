@@ -8,7 +8,6 @@ Used [Osmosis](https://osmcode.org/) to process the data to just get restaurants
  - Specifically used osmium tags-filter --output=restaurantsInBC.osm.pbf -v --progress british-columbia-251111-raw.osm.pbf /amenity=restaurant
 
 Used osmosis show filename to check it was indeed restaurants
-- Fruther checked validity by filtering for a specific name or brand
+- Further checked validity by filtering for a specific name or brand
 - I tried viewing the map by using [openstreetmap-tile-server](https://github.com/Overv/openstreetmap-tile-server) but after running the docker a few times succesfully I never got anything but a blank map showing
- - I also installed QGIS to try and view it but it didn't support pbf and after converting it so a sqlite database it wouldn't import so the other verification method is sufficient
-
+- I also installed QGIS to try and view it but it didn't support pbf and after converting it so a sqlite database it wouldn't import so the other verification method is sufficient
