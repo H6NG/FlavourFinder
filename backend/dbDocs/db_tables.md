@@ -13,6 +13,7 @@ erDiagram
         string	name
         string	email
         string	saltedHashedPW
+        string  nonce
         bool	glutenFree
         bool	vegetarian
         bool	vegan
