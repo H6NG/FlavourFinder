@@ -1,11 +1,11 @@
 
-FROM eclipse-temurin:17-jdk
-WORKDIR /app
-COPY . .
-RUN chmod +x ./gradlew 
-RUN ./gradlew build -x test
-EXPOSE 8080
-CMD ["java", "-jar", "build/libs/javaBackend-1.0-SNAPSHOT.jar"]
+#FROM eclipse-temurin:17-jdk
+#WORKDIR /app
+#COPY . .
+#RUN chmod +x ./gradlew 
+#RUN ./gradlew build -x test
+#EXPOSE 8080
+#CMD ["java", "-jar", "build/libs/javaBackend-1.0-SNAPSHOT.jar"]
 #CMD ["sh", "-c", "java -jar build/libs/*.jar"]
 
 # Step 1: Use an official Java image with JDK 17 //openjdk:17-jdk-slim is archived
