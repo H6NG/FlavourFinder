@@ -11,6 +11,9 @@ erDiagram
     User {
     	int		id
         string	name
+		string 	firstName
+		string	middleName
+		string	lastName
         string	email
         string	saltedHashedPW
         string  nonce
