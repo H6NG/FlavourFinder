@@ -18,6 +18,7 @@ public class DBConnection {
         }
     }
 
+    // execute a given SQL file given a path
     public void executeFile(String filePath) {
         try (
                 BufferedReader reader = new BufferedReader(new FileReader(filePath));

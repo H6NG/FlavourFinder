@@ -1,0 +1,52 @@
+CREATE TABLE users (
+	userID 			int,
+	userName		varchar(255),
+	firstName		varchar(255),
+	middleName		varchar(255),
+	lastName		varchar(255),
+	email			varchar(255),
+	pwhash			bytea,
+	salt			varchar(128),
+	preferenceID	int,
+	lastLocation	point
+);
+
+CREATE TABLE preference (
+	prefID 			int,
+	glutenFree		boolean,
+	vegetarian		boolean,
+	vegan			boolean
+);
+
+CREATE TABLE restauruant (
+	restID 			int,
+	osmID			int,
+	resName			varchar(255),
+	prefID			int,
+	locat			point
+);
+
+CREATE TABLE authTokens (
+	tokenID			int,
+	tokenStr		varchar(255),
+	userID			int,
+	expiry			timestamptz
+);
+
+CREATE TABLE recommendHistory (
+	recomID			int,
+	userID			int,
+	restID			int,
+	timeRecom		timestamptz,
+	userLocat		point
+);
+
+CREATE TABLE choices (
+	choiceID		int,
+	userID			int,
+	rest1ID			int,
+	rest2ID			int,
+	rest3ID			int,
+	timeChose		timestamptz
+)
+
