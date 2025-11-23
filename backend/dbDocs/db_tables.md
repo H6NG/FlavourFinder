@@ -17,6 +17,7 @@ erDiagram
         string	email
         string	saltedHashedPW
         string  nonce
+		int		userPreferenceID
 		locat	lastLocation
     }
 	UserPreferences {
