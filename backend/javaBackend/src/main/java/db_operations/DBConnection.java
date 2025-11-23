@@ -18,7 +18,7 @@ public class DBConnection {
         }
     }
 
-    public boolean executeFile(String filePath) {
+    public void executeFile(String filePath) {
         try (
                 BufferedReader reader = new BufferedReader(new FileReader(filePath));
                 Statement statement =this.connection.createStatement();
