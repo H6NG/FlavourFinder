@@ -17,10 +17,14 @@ erDiagram
         string	email
         string	saltedHashedPW
         string  nonce
-        bool	glutenFree
+		locat	lastLocation
+    }
+	UserPreferences {
+		int id
+		bool	glutenFree
         bool	vegetarian
         bool	vegan
-    }
+	}
 	Restauraunt {
     	int 	id
 		int		osmNodeID
