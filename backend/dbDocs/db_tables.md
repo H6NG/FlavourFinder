@@ -20,8 +20,8 @@ erDiagram
 		int		userPreferenceID
 		locat	lastLocation
     }
-	UserPreferences {
-		int id
+	Preferences {
+		int 	id
 		bool	glutenFree
         bool	vegetarian
         bool	vegan
@@ -30,6 +30,8 @@ erDiagram
     	int 	id
 		int		osmNodeID
         string	name
+		int		prefID
+		locat	location
     }
     AuthTokens {
     	int		id
@@ -50,7 +52,6 @@ erDiagram
         int		restauruantID
         int		restaurauntID
         int		restauruantID
-        int		numChosen
         date	timeChose
     }
 ```
