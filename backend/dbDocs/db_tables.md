@@ -10,13 +10,13 @@ title: Database Tables
 erDiagram
     User {
     	int		id
-        string	name
+        string	userName
 		string 	firstName
 		string	middleName
 		string	lastName
         string	email
-        string	saltedHashedPW
-        string  nonce
+        bytes	saltedHashedPW
+        string  salt
 		int		userPreferenceID
 		locat	lastLocation
     }
