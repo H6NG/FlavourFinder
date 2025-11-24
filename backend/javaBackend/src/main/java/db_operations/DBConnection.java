@@ -66,7 +66,7 @@ public class DBConnection {
         }
     }
 
-    public addRestauraunts() {
-
-    }
+//    public addRestauraunts() {
+//
+//    }
 }
