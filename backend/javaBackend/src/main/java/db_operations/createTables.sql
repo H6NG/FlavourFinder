@@ -18,7 +18,7 @@ CREATE TABLE preference (
 	vegan			boolean NOT NULL
 );
 
-CREATE TABLE restauruant (
+CREATE TABLE restauraunt (
 	restID 			int PRIMARY KEY,
 	osmID			int,
 	resName			varchar(255) NOT NULL,
@@ -50,4 +50,5 @@ CREATE TABLE choices (
 	numChose		int NOT NULL,
 	timeChose		timestamptz
 );
+
 
