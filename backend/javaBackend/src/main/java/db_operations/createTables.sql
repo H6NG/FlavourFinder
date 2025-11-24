@@ -51,4 +51,3 @@ CREATE TABLE choices (
 	timeChose		timestamptz
 );
 
-

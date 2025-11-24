@@ -65,4 +65,8 @@ public class DBConnection {
             throw new RuntimeException(e);
         }
     }
+
+    public addRestauraunts() {
+
+    }
 }
