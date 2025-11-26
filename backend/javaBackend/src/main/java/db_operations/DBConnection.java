@@ -1,5 +1,7 @@
 package db_operations;
 
+import user.Restaurant;
+
 import java.io.BufferedReader;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
@@ -66,7 +68,78 @@ public class DBConnection {
         }
     }
 
-//    public addRestauraunts() {
-//
-//    }
+    public boolean addRestauraunt(dbRestauraunt res, dbPreference pref) throws java.sql.SQLException{
+        // statement to insert preferences first
+        PreparedStatement prefInsert = this.connection.prepareStatement(
+                "INSERT INTO preference (glutenfree, vegetarian, vegan)" +
+                        "VALUES (?, ?, ?) RETURNING prefID"
+        );
+
+        prefInsert.setBoolean(1, pref.glutenFree());
+        prefInsert.setBoolean(2, pref.vegetarian());
+        prefInsert.setBoolean(3, pref.vegan());
+
+        ResultSet r = prefInsert.executeQuery();
+        int prefID = 0;
+        while (r.next()) {
+            prefID = r.getInt("prefid");
+        }
+        r.close();
+        prefInsert.close();
+
+        PreparedStatement resInsert = this.connection.prepareStatement(
+            "INSERT INTO restauraunt (osmid, resname, prefid, locatLat, locatLong, address) " +
+                "VALUES (?, ?, ?, ?, ?, ?)"
+        );
+
+        resInsert.setInt(1, res.osmID());
+        resInsert.setString(2, res.name());
+        resInsert.setInt(3, prefID);
+        resInsert.setDouble(4, res.latitude());
+        resInsert.setDouble(5, res.longitude());
+        resInsert.setString(6, res.address());
+
+        resInsert.executeQuery();
+        int rInsert = resInsert.getUpdateCount();
+
+        if (rInsert != 1) {
+            return false;
+        } else {
+            return true;
+        }
+    }
+
+    // get all restauraunts sorted by distance of radius km within lat, long
+    public ResultSet getRestauraunts(double latitude, double longitude, double radius) throws java.sql.SQLException{
+        PreparedStatement getRes = this.connection.prepareStatement(
+                "SELECT" +
+                        "resname," +
+                        "osmid," +
+                        "glutenfree," +
+                        "vegetarian," +
+                        "vegan," +
+                        "    earth_distance(" +
+                        "        ll_to_earth(restauraunt.locatLat, restauraunt.locatLong)," +
+                        "        ll_to_earth(?, ?)" +
+                        "    )::integer/1000 AS distance_kilometers" +
+                        "FROM restauraunt" +
+                        "INNER JOIN preference ON preference.prefid = restauraunt.prefid" +
+                        "WHERE" +
+                        "    earth_distance(" +
+                        "        ll_to_earth(locatLat, locatLong)," +
+                        "        ll_to_earth(?, ?)" +
+                        "    )/1000 < ?" +
+                        "ORDER BY distance_kilometers;"
+        );
+
+        getRes.setDouble(1, latitude);
+        getRes.setDouble(2, longitude);
+        getRes.setDouble(3, latitude);
+        getRes.setDouble(4, longitude);
+        getRes.setDouble(5, radius);
+
+        return getRes.executeQuery();
+    }
+
+
 }

@@ -23,6 +23,7 @@ CREATE TABLE restauraunt (
 	restID 			SERIAL PRIMARY KEY,
 	osmID			int,
 	resName			varchar(255) NOT NULL,
+	address         varchar(255),
 	prefID			int REFERENCES preference (prefID),
 	locatLat		double precision,
 	locatLong		double precision
