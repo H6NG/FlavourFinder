@@ -7,6 +7,8 @@ import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
 import java.sql.*;
+import java.util.HashSet;
+import java.util.Set;
 
 public class DBConnection {
     Connection connection;
@@ -109,12 +111,15 @@ public class DBConnection {
         }
     }
 
-    // get all restauraunts sorted by distance of radius km within lat, long
-    public ResultSet getRestauraunts(double latitude, double longitude, double radius) throws java.sql.SQLException{
+    // get all restauraunts with distance of radius km within lat, long
+    public Set<dbRestauraunt> getRestauraunts(double latitude, double longitude, double radius) throws java.sql.SQLException{
         PreparedStatement getRes = this.connection.prepareStatement(
                 "SELECT" +
                         "resname," +
                         "osmid," +
+                        "address," +
+                        "locatlat," +
+                        "locatlong," +
                         "glutenfree," +
                         "vegetarian," +
                         "vegan," +
@@ -138,7 +143,26 @@ public class DBConnection {
         getRes.setDouble(4, longitude);
         getRes.setDouble(5, radius);
 
-        return getRes.executeQuery();
+        ResultSet rs = getRes.executeQuery();
+        Set<dbRestauraunt> resSet = new HashSet<>();
+
+        while (rs.next()) {
+            dbRestauraunt restauraunt = new dbRestauraunt(
+                    rs.getInt("osmid"),
+                    rs.getString("resname"),
+                    new dbPreference(
+                            rs.getBoolean("glutenfree"),
+                            rs.getBoolean("vegetarian"),
+                            rs.getBoolean("vegan")
+                    ),
+                    rs.getString("address"),
+                    rs.getDouble("locatlat"),
+                    rs.getDouble("locatlong")
+            );
+            resSet.add(restauraunt);
+        }
+
+        return resSet;
     }
 
 
