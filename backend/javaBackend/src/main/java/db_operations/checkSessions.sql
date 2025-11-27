@@ -1,0 +1,1 @@
+SELECT usename, datname, ssl FROM pg_stat_ssl JOIN pg_stat_activity ON pg_stat_ssl.pid = pg_stat_activity.pid;
