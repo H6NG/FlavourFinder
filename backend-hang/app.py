@@ -7,9 +7,10 @@ from flask_jwt_extended import (
     jwt_required,
     get_jwt_identity
 )
-from passlib.hash import bcrypt
+from passlib.hash import argon2
 import psycopg2
 import os
+import ssl
 
 app = Flask(__name__); 
 CORS(app); 
@@ -33,7 +34,8 @@ try:
         dbname=db_name,
         user=db_user,
         password=db_password, 
-        port=db_port
+        port=db_port,
+        sslmode='require'
     )
     print("FOR DEBUG ONLY: Connected to the PostgreSQL database successfully.")
     
@@ -99,22 +101,21 @@ def registerUser():
 
     if not email or not userName or not password:
         return jsonify({"error": "Missing required fields."}), 400
-
-    hashed_pw = bcrypt.hash(password)
+    
+    hashed_pw = argon2.hash(password)
 
     try:
         cur = connection.cursor()
         cur.execute("""
-            INSERT INTO "User"
-            (email, userName, saltedHashedPW, firstName, lastName, userPreferenceID)
-            VALUES (%s, %s, %s, %s, %s, %s, %s)
+            INSERT INTO users
+            (email, userName, pwhash)
+            VALUES (%s, %s, %s, %s)
             RETURNING id;
-        """, (email, userName, hashed_pw, firstName, lastName, preferenceID))
+        """, (email, userName, hashed_pw))
 
         user_id = cur.fetchone()[0]
         connection.commit()
         cur.close()
-        connection.close()
 
         access_token = create_access_token(identity=user_id)
 

@@ -13,7 +13,7 @@ CREATE TABLE users (
 	lastName		varchar(255),
 	email			varchar(255),
 	pwhash			bytea NOT NULL,
-	salt			bytea NOT NULL,
+	salt			bytea,
 	preferenceID	int REFERENCES preference (prefID),
 	lastLocatLat	double precision,
 	lastLocatLong 	double precision

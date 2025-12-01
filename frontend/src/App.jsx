@@ -10,6 +10,7 @@ import 'ol/ol.css';
 
 export default function App() {
 
+
   useEffect(() => {
     // 1. Create the Map instance
     const map = new Map({
@@ -65,5 +66,6 @@ export default function App() {
         </p>
       </div>
     </div>
+
   );
 }
