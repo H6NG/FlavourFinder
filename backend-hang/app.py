@@ -102,8 +102,8 @@ def registerUser():
     try:
         cur = connection.cursor()
         cur.execute("""
-            INSERT INTO "User" (email, userName, saltedHashedPW, salt)
-            VALUES (%s, %s, %s, %s)
+            INSERT INTO "User" (email, userName, hashed_pw)
+            VALUES (%s, %s, %s)
             RETURNING id;
         """, (email, userName, hashed_pw))
 
