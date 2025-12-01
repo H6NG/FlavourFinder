@@ -1,5 +1,5 @@
 from flask import Flask, request, jsonify
-from flask import CORS
+from flask_cors import CORS
 from dotenv import load_dotenv
 import psycopg2
 import os
@@ -20,7 +20,7 @@ CORS(app);
 
 connection =  psycopg2.connect(
     host=db_host,
-    db_name=db_name,
+    dbname=db_name,
     user=db_user,
     password=db_password, 
     port=db_port
@@ -34,7 +34,7 @@ def home():
 
 @app.route('/api/refreshToken', methods=['GET'])
 def refreshToken(): 
-    
+
 
 
 
