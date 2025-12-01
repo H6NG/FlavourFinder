@@ -108,10 +108,10 @@ def registerUser():
         cur = connection.cursor()
         cur.execute("""
             INSERT INTO users
-            (email, userName, pwhash, salt)
-            VALUES (%s, %s, %s, %s, %s, %s)
+            (email, userName, pwhash)
+            VALUES (%s, %s, %s, %s)
             RETURNING id;
-        """, (email, userName, hashed_pw, firstName, lastName, preferenceID))
+        """, (email, userName, hashed_pw))
 
         user_id = cur.fetchone()[0]
         connection.commit()
