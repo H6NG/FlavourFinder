@@ -11,9 +11,18 @@ import java.util.HashSet;
 import java.util.Set;
 
 public class DBConnection {
-    Connection connection;
+    private static DBConnection DBConnection = new DBConnection();
+    private static Connection connection;
 
-    public DBConnection(String url, String user, String password) {
+    private DBConnection() {
+        String url;
+        if (System.getenv("FF_URL").isEmpty()) {
+            url = "jdbc:postgresql://ffpg.bungalou.ca:5433/fftest";
+        } else {
+            url = System.getenv("FF_URL");
+        }
+        String user = System.getenv("FF_USER");
+        String password = System.getenv("FF_PASSWORD");
         try {
             connection = DriverManager.getConnection(url, user, password);
         } catch (SQLException e) {
@@ -23,10 +32,10 @@ public class DBConnection {
     }
 
     // execute a given SQL file given a path
-    public void executeFile(String filePath) {
+    public static void executeFile(String filePath) {
         try (
                 BufferedReader reader = new BufferedReader(new FileReader(filePath));
-                Statement statement =this.connection.createStatement();
+                Statement statement = connection.createStatement();
         ) {
             StringBuilder sb = new StringBuilder();
             String line;
@@ -70,9 +79,9 @@ public class DBConnection {
         }
     }
 
-    public boolean addRestauraunt(dbRestauraunt res, dbPreference pref) throws java.sql.SQLException{
+    public static boolean addRestauraunt(dbRestauraunt res, dbPreference pref) throws java.sql.SQLException{
         // statement to insert preferences first
-        PreparedStatement prefInsert = this.connection.prepareStatement(
+        PreparedStatement prefInsert = connection.prepareStatement(
                 "INSERT INTO preference (glutenfree, vegetarian, vegan)" +
                         "VALUES (?, ?, ?) RETURNING prefID"
         );
@@ -89,7 +98,7 @@ public class DBConnection {
         r.close();
         prefInsert.close();
 
-        PreparedStatement resInsert = this.connection.prepareStatement(
+        PreparedStatement resInsert = connection.prepareStatement(
             "INSERT INTO restauraunt (osmid, resname, prefid, locatLat, locatLong, address) " +
                 "VALUES (?, ?, ?, ?, ?, ?)"
         );
@@ -112,8 +121,8 @@ public class DBConnection {
     }
 
     // get all restauraunts with distance of radius km within lat, long
-    public Set<dbRestauraunt> getRestauraunts(double latitude, double longitude, double radius) throws java.sql.SQLException{
-        PreparedStatement getRes = this.connection.prepareStatement(
+    public static Set<dbRestauraunt> getRestauraunts(double latitude, double longitude, double radius) throws java.sql.SQLException{
+        PreparedStatement getRes = connection.prepareStatement(
                 "SELECT" +
                         "resname," +
                         "osmid," +
