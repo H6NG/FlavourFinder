@@ -1,5 +1,8 @@
 package user;
 
+import db_operations.dbPreference;
+import db_operations.dbRestauraunt;
+
 import java.util.*;
 
 public class User {
@@ -14,6 +17,8 @@ public class User {
 
     //ranking of the user, double is the weight
     private Map<Restaurant, Double> ranking;
+
+
 
     //figure out how to store the last x visited restaurants
 
@@ -52,8 +57,9 @@ public class User {
     }
 
     //guest recommendation
-    public static Restaurant getRecommendation(double longitude, double latitude, double range, List<Preferences> preferencesList){
-        return null;
+    public static dbRestauraunt getRecommendation(double longitude, double latitude, dbPreference preference){
+        System.out.println("in getrecom");
+        return new dbRestauraunt(21, "Hello From the Other side", new dbPreference(true, false, true), "hi", 0, 0);
     }
 
     //get three restaurants to rank
