@@ -165,12 +165,12 @@ public class DBConnection {
         return resSet;
     }
 
-    public boolean addUser(String username, Password hashedPassword) {
+//    public boolean addUser(String username, Password hashedPassword) {
+//
+//    }
 
-    }
-
-    public boolean existUser(String username) {
-
-    }
+//    public boolean existUser(String username) {
+//
+//    }
 
 }
