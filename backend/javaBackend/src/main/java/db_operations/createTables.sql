@@ -13,7 +13,7 @@ CREATE TABLE users (
 	lastName		varchar(255),
 	email			varchar(255),
 	pwhash			bytea NOT NULL,
-	salt			varchar(128) NOT NULL,
+	salt			bytea NOT NULL,
 	preferenceID	int REFERENCES preference (prefID),
 	lastLocatLat	double precision,
 	lastLocatLong 	double precision
@@ -55,3 +55,4 @@ CREATE TABLE choices (
 	timeChose		timestamptz
 );
 
+ALTER TABLE users ALTER COLUMN salt TYPE bytea USING salt::bytea;
