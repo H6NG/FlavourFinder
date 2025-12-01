@@ -1,6 +1,13 @@
 from flask import Flask, request, jsonify
 from flask_cors import CORS
 from dotenv import load_dotenv
+from flask_jwt_extended import (
+    JWTManager,
+    create_access_token,
+    jwt_required,
+    get_jwt_identity
+)
+from passlib.hash import bcrypt
 import psycopg2
 import os
 
@@ -77,7 +84,42 @@ def getUserSelf():
 
 @app.route('/api/registerUser', methods = ['POST'])
 def registerUser():
-    pass
+    data = request.get_json()
+
+    email = data.get("email")
+    name = data.get("name")
+    password = data.get("password")
+    token = data.get("token")
+
+    if not email or not name or not password:
+        return jsonify({"error": "Missing required fields."}), 400
+
+    hashed_pw = bcrypt.hash(password)
+
+    try:
+        cur = connection.cursor()
+        cur.execute("""
+            INSERT INTO users (email, name, password)
+            VALUES (%s, %s, %s)
+            RETURNING id;
+        """, (email, name, hashed_pw))
+
+        user_id = cur.fetchone()[0]
+        connection.commit()
+        cur.close()
+
+        access_token = create_access_token(identity=user_id)
+
+        return jsonify({
+            "id": user_id,
+            "email": email,
+            "name": name,
+            "token": access_token
+        }), 201
+
+    except Exception as e:
+        print("Database error:", e)
+        return jsonify({"error": "User may already exist!"}), 409
 
 @app.route('/api/updatePreferences', methods = ['PUT'])
 def updatePreferences():
