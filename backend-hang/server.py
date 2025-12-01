@@ -1,12 +1,32 @@
 from flask import Flask, request, jsonify
 from flask import CORS
-
 from dotenv import load_dotenv
+import psycopg2
+import os
 
 load_dotenv(); 
 
+db_host = os.getenv("db_host")
+db_name = os.getenv("db_name")
+db_user = os.getenv("db_user")
+db_password = os.getenv("db_password")
+db_port = os.getenv("db_port")
+
 app = Flask(__name__); 
 CORS(app); 
+
+
+# Connection with the SQL postgres database 
+
+connection =  psycopg2.connect(
+    host=db_host,
+    db_name=db_name,
+    user=db_user,
+    password=db_password, 
+    port=db_port
+)
+
+# Routes
 
 @app.route('/')
 def home():
@@ -14,7 +34,7 @@ def home():
 
 @app.route('/api/refreshToken', methods=['GET'])
 def refreshToken(): 
-
+    
 
 
 
