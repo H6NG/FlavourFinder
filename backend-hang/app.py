@@ -11,18 +11,19 @@ from passlib.hash import bcrypt
 import psycopg2
 import os
 
+app = Flask(__name__); 
+CORS(app); 
+
 load_dotenv(); 
+
+app.config["JWT_SECRET_KEY"] = os.getenv("JWT_SECRET_KEY")
+jwt = JWTManager(app)
 
 db_host = os.getenv("db_host")
 db_name = os.getenv("db_name")
 db_user = os.getenv("db_user")
 db_password = os.getenv("db_password")
 db_port = os.getenv("db_port")
-app.config["JWT_SECRET_KEY"] = os.getenv("JWT_SECRET_KEY")
-jwt = JWTManager(app)
-
-app = Flask(__name__); 
-CORS(app); 
 
 
 # Connection with the SQL postgres database 
