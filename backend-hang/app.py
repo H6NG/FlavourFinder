@@ -18,6 +18,8 @@ db_name = os.getenv("db_name")
 db_user = os.getenv("db_user")
 db_password = os.getenv("db_password")
 db_port = os.getenv("db_port")
+app.config["JWT_SECRET_KEY"] = os.getenv("JWT_SECRET_KEY")
+jwt = JWTManager(app)
 
 app = Flask(__name__); 
 CORS(app); 
@@ -41,7 +43,7 @@ except Exception as e:
 
 @app.route('/')
 def home():
-    return "For DEBUGGING: Flask backend connected to MongoDB securely."
+    return "For DEBUGGING: Flask backend connected to PostgreSQL securely."
 
 @app.route('/api/refreshToken', methods=['GET'])
 def refreshToken(): 
