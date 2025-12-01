@@ -90,11 +90,11 @@ def registerUser():
     data = request.get_json()
 
     email = data.get("email")
-    name = data.get("name")
+    userName = data.get("userName")
     password = data.get("password")
     token = data.get("token")
 
-    if not email or not name or not password:
+    if not email or not userName or not password:
         return jsonify({"error": "Missing required fields."}), 400
 
     hashed_pw = bcrypt.hash(password)
@@ -102,21 +102,22 @@ def registerUser():
     try:
         cur = connection.cursor()
         cur.execute("""
-            INSERT INTO users (email, name, password)
-            VALUES (%s, %s, %s)
+            INSERT INTO "User" (email, userName, saltedHashedPW, salt)
+            VALUES (%s, %s, %s, %s)
             RETURNING id;
-        """, (email, name, hashed_pw))
+        """, (email, userName, hashed_pw))
 
         user_id = cur.fetchone()[0]
         connection.commit()
         cur.close()
+        connection.close()
 
         access_token = create_access_token(identity=user_id)
 
         return jsonify({
             "id": user_id,
             "email": email,
-            "name": name,
+            "name": userName,
             "token": access_token
         }), 201
 
