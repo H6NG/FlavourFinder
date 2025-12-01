@@ -7,20 +7,24 @@ from flask_jwt_extended import (
     jwt_required,
     get_jwt_identity
 )
-from passlib.hash import bcrypt
+from passlib.hash import argon2
 import psycopg2
 import os
+import ssl
+
+app = Flask(__name__); 
+CORS(app); 
 
 load_dotenv(); 
+
+app.config["JWT_SECRET_KEY"] = os.getenv("JWT_SECRET_KEY")
+jwt = JWTManager(app)
 
 db_host = os.getenv("db_host")
 db_name = os.getenv("db_name")
 db_user = os.getenv("db_user")
 db_password = os.getenv("db_password")
 db_port = os.getenv("db_port")
-
-app = Flask(__name__); 
-CORS(app); 
 
 
 # Connection with the SQL postgres database 
@@ -30,7 +34,8 @@ try:
         dbname=db_name,
         user=db_user,
         password=db_password, 
-        port=db_port
+        port=db_port,
+        sslmode='require'
     )
     print("FOR DEBUG ONLY: Connected to the PostgreSQL database successfully.")
     
@@ -41,7 +46,7 @@ except Exception as e:
 
 @app.route('/')
 def home():
-    return "For DEBUGGING: Flask backend connected to MongoDB securely."
+    return "For DEBUGGING: Flask backend connected to PostgreSQL securely."
 
 @app.route('/api/refreshToken', methods=['GET'])
 def refreshToken(): 
@@ -87,22 +92,26 @@ def registerUser():
     data = request.get_json()
 
     email = data.get("email")
-    name = data.get("name")
+    userName = data.get("userName")
     password = data.get("password")
     token = data.get("token")
+    firstName = data.get("firstName", "Hang")   
+    lastName = data.get("lastName", "Liu")
+    preferenceID = None
 
-    if not email or not name or not password:
+    if not email or not userName or not password:
         return jsonify({"error": "Missing required fields."}), 400
-
-    hashed_pw = bcrypt.hash(password)
+    
+    hashed_pw = argon2.hash(password)
 
     try:
         cur = connection.cursor()
         cur.execute("""
-            INSERT INTO users (email, name, password)
-            VALUES (%s, %s, %s)
+            INSERT INTO users
+            (email, userName, pwhash)
+            VALUES (%s, %s, %s, %s)
             RETURNING id;
-        """, (email, name, hashed_pw))
+        """, (email, userName, hashed_pw))
 
         user_id = cur.fetchone()[0]
         connection.commit()
@@ -113,7 +122,7 @@ def registerUser():
         return jsonify({
             "id": user_id,
             "email": email,
-            "name": name,
+            "name": userName,
             "token": access_token
         }), 201
 
