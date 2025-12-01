@@ -1,3 +1,5 @@
+package Server;
+
 import com.sun.net.httpserver.*;
 
 import java.io.IOException;
@@ -10,7 +12,7 @@ public class Server {
         try {
             server = HttpServer.create(new InetSocketAddress(8000), 0);
         } catch (IOException e) {
-            throw new RuntimeException("Server Creation failed");
+            throw new RuntimeException("Server.Server Creation failed");
         }
         server.createContext("/api/v1/restauraunt/recommend-guest", new RecommendGuestHandler());
         server.setExecutor(null);
@@ -23,5 +25,4 @@ public class Server {
     public void stopServer(int delay) {
         server.stop(delay);
     }
-
 }
