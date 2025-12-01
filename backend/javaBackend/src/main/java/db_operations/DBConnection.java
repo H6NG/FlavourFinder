@@ -1,6 +1,6 @@
 package db_operations;
 
-import user.Restaurant;
+import security.Password;
 
 import java.io.BufferedReader;
 import java.io.FileNotFoundException;
@@ -165,5 +165,12 @@ public class DBConnection {
         return resSet;
     }
 
+    public boolean addUser(String username, Password hashedPassword) {
+
+    }
+
+    public boolean existUser(String username) {
+
+    }
 
 }
