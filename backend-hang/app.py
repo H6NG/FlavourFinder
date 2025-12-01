@@ -93,6 +93,9 @@ def registerUser():
     userName = data.get("userName")
     password = data.get("password")
     token = data.get("token")
+    firstName = data.get("firstName", "Hang")   
+    lastName = data.get("lastName", "Liu")
+    preferenceID = None
 
     if not email or not userName or not password:
         return jsonify({"error": "Missing required fields."}), 400
@@ -102,10 +105,11 @@ def registerUser():
     try:
         cur = connection.cursor()
         cur.execute("""
-            INSERT INTO "User" (email, userName, hashed_pw)
-            VALUES (%s, %s, %s)
+            INSERT INTO "User"
+            (email, userName, saltedHashedPW, firstName, lastName, userPreferenceID)
+            VALUES (%s, %s, %s, %s, %s, %s, %s)
             RETURNING id;
-        """, (email, userName, hashed_pw))
+        """, (email, userName, hashed_pw, firstName, lastName, preferenceID))
 
         user_id = cur.fetchone()[0]
         connection.commit()
