@@ -58,7 +58,6 @@ public class User {
 
     //guest recommendation
     public static dbRestauraunt getRecommendation(double longitude, double latitude, dbPreference preference){
-        System.out.println("in getrecom");
         return new dbRestauraunt(21, "Hello From the Other side", new dbPreference(true, false, true), "hi", 0, 0);
     }
 

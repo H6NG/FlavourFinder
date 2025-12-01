@@ -26,7 +26,6 @@ public class RecommendGuestHandler implements HttpHandler {
             Headers header = httpExchange.getRequestHeaders();
             String contentType = header.get("Content-Type").toString();
 
-            System.out.print(contentType);
             if (!contentType.equals("[application/json]")) {
                 System.err.println("Wrong content type");
             }
