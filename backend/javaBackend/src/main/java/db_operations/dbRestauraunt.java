@@ -1,7 +1,7 @@
 package db_operations;
 
 public record dbRestauraunt(
-        int osmID,
+        long osmID,
         String name,
         dbPreference preference,
         String address,

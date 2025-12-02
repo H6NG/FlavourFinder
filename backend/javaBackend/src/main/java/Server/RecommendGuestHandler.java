@@ -33,12 +33,23 @@ public class RecommendGuestHandler implements HttpHandler {
             InputStream request = httpExchange.getRequestBody();
 
             BufferedReader inReader = new BufferedReader(new InputStreamReader(request));
+            System.out.print("gothere");
 
-            recommendRequestParam result = new Gson().fromJson(inReader, recommendRequestParam.class);
+            recommendRequestParam result = null;
+
+            try {
+                result = new Gson().fromJson(inReader, recommendRequestParam.class);
+            } catch(Exception e) {
+                System.err.println("Errored");
+                System.err.println("Json : " + inReader.readLine());
+                System.err.println(e.toString());
+            }
+            System.out.print("here");
 
             dbRestauraunt recommended = User.getRecommendation(
-                    result.getlocation().getLongitude(),
                     result.getlocation().getLatitude(),
+                    result.getlocation().getLongitude(),
+                    result.radius(),
                     result.getPreference());
 
             JsonObject response = new JsonObject();

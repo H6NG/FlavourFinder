@@ -7,7 +7,9 @@ import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
 import java.sql.*;
+import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 public class DBConnection {
@@ -16,18 +18,28 @@ public class DBConnection {
 
     private DBConnection() {
         String url;
-        if (System.getenv("FF_URL").isEmpty()) {
+        if (System.getenv("FF_URL") == null) {
             url = "jdbc:postgresql://ffpg.bungalou.ca:5433/fftest";
         } else {
             url = System.getenv("FF_URL");
         }
-        String user = System.getenv("FF_USER");
-        String password = System.getenv("FF_PASSWORD");
+        //String user = System.getenv("FF_USER");
+        String user = "ffadmin";
+        //String password = System.getenv("FF_PASSWORD");
+        String password = "rziHaADizg9B7Dazy";
         try {
             connection = DriverManager.getConnection(url, user, password);
         } catch (SQLException e) {
             System.err.println("Database Connection failed");
             throw new RuntimeException(e);
+        }
+    }
+
+    public static String getStatus() {
+        try {
+            return connection.getClientInfo().toString();
+        } catch (SQLException e) {
+            throw new RuntimeException("Unable to get status");
         }
     }
 
@@ -103,7 +115,7 @@ public class DBConnection {
                 "VALUES (?, ?, ?, ?, ?, ?)"
         );
 
-        resInsert.setInt(1, res.osmID());
+        resInsert.setLong(1, res.osmID());
         resInsert.setString(2, res.name());
         resInsert.setInt(3, prefID);
         resInsert.setDouble(4, res.latitude());
@@ -121,57 +133,62 @@ public class DBConnection {
     }
 
     // get all restauraunts with distance of radius km within lat, long
-    public static Set<dbRestauraunt> getRestauraunts(double latitude, double longitude, double radius) throws java.sql.SQLException{
+    public static List<dbRestauraunt> getRestauraunts(double latitude, double longitude, double radius) throws java.sql.SQLException{
         PreparedStatement getRes = connection.prepareStatement(
-                "SELECT" +
-                        "resname," +
-                        "osmid," +
-                        "address," +
-                        "locatlat," +
-                        "locatlong," +
-                        "glutenfree," +
-                        "vegetarian," +
-                        "vegan," +
-                        "    earth_distance(" +
-                        "        ll_to_earth(restauraunt.locatLat, restauraunt.locatLong)," +
-                        "        ll_to_earth(?, ?)" +
-                        "    )::integer/1000 AS distance_kilometers" +
-                        "FROM restauraunt" +
-                        "INNER JOIN preference ON preference.prefid = restauraunt.prefid" +
-                        "WHERE" +
-                        "    earth_distance(" +
-                        "        ll_to_earth(locatLat, locatLong)," +
-                        "        ll_to_earth(?, ?)" +
-                        "    )/1000 < ?" +
+                "SELECT\n" +
+                        "\tresname,\n" +
+                        "\tosmid,\n" +
+                        "--\tglutenfree,\n" +
+                        "--\tvegetarian,\n" +
+                        "--\tvegan,\n" +
+                        "\taddress,\n" +
+                        "\tlocatlat,\n" +
+                        "\tlocatlong,\n" +
+                        "    earth_distance(\n" +
+                        "        ll_to_earth(restauraunt.locatLat, restauraunt.locatLong),\n" +
+                        "        ll_to_earth(?, ?)\n" +
+                        "    )::integer/1000 AS distance_kilometers\n" +
+                        "FROM restauraunt\n" +
+                        "--INNER JOIN preference ON preference.prefid = restauraunt.prefid\n" +
+                        "WHERE\n" +
+                        "    earth_distance(\n" +
+                        "        ll_to_earth(locatLat, locatLong),\n" +
+                        "        ll_to_earth(?, ?)\n" +
+                        "    )/1000 < ?\n" +
                         "ORDER BY distance_kilometers;"
         );
 
         getRes.setDouble(1, latitude);
+        System.out.println("Latitude: " + latitude);
         getRes.setDouble(2, longitude);
+        System.out.println("Longittude: " + longitude);
         getRes.setDouble(3, latitude);
         getRes.setDouble(4, longitude);
         getRes.setDouble(5, radius);
 
         ResultSet rs = getRes.executeQuery();
-        Set<dbRestauraunt> resSet = new HashSet<>();
+
+        List<dbRestauraunt> resList = new ArrayList<>();
 
         while (rs.next()) {
+            System.out.println("While executed");
             dbRestauraunt restauraunt = new dbRestauraunt(
-                    rs.getInt("osmid"),
+                    rs.getLong("osmid"),
                     rs.getString("resname"),
-                    new dbPreference(
-                            rs.getBoolean("glutenfree"),
-                            rs.getBoolean("vegetarian"),
-                            rs.getBoolean("vegan")
-                    ),
+//                    new dbPreference(
+//                            rs.getBoolean("glutenfree"),
+//                            rs.getBoolean("vegetarian"),
+//                            rs.getBoolean("vegan")
+//                    ),
+                    null,
                     rs.getString("address"),
                     rs.getDouble("locatlat"),
                     rs.getDouble("locatlong")
             );
-            resSet.add(restauraunt);
+            resList.add(restauraunt);
         }
 
-        return resSet;
+        return resList;
     }
 
 //    public boolean addUser(String username, Password hashedPassword) {

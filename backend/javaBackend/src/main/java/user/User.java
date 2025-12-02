@@ -1,8 +1,10 @@
 package user;
 
+import db_operations.DBConnection;
 import db_operations.dbPreference;
 import db_operations.dbRestauraunt;
 
+import java.sql.SQLException;
 import java.util.*;
 
 public class User {
@@ -18,7 +20,7 @@ public class User {
     //ranking of the user, double is the weight
     private Map<Restaurant, Double> ranking;
 
-
+    private static Random random = new Random();
 
     //figure out how to store the last x visited restaurants
 
@@ -57,8 +59,30 @@ public class User {
     }
 
     //guest recommendation
-    public static dbRestauraunt getRecommendation(double longitude, double latitude, dbPreference preference){
-        return new dbRestauraunt(21, "Hello From the Other side", new dbPreference(true, false, true), "hi", 0, 0);
+    public static dbRestauraunt getRecommendation(double latitude, double longitude, double radius, dbPreference preference){
+        List<dbRestauraunt> listOfRestauraunt;
+        try {
+            listOfRestauraunt = DBConnection.getRestauraunts(latitude, longitude, radius);
+            System.out.println("Gotten Restauraunts from db");
+            System.out.println("Size of set: " + listOfRestauraunt.size());
+        } catch (SQLException e) {
+            System.err.println("Error getting restauraunts from db");
+            System.err.println(e.toString());
+            System.err.println(e.getMessage());
+            throw new RuntimeException(e);
+        }
+        int randomindex = 0;
+        try {
+            randomindex = random.nextInt(listOfRestauraunt.size());
+        } catch (Exception e) {
+            System.err.println(e.toString());
+            throw new RuntimeException(e);
+        }
+        System.out.println(randomindex);
+
+        dbRestauraunt randomRes = listOfRestauraunt.get(randomindex);
+        System.out.println("returning res");
+        return randomRes;
     }
 
     //get three restaurants to rank

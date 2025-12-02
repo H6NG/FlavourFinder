@@ -55,4 +55,8 @@ CREATE TABLE choices (
 	timeChose		timestamptz
 );
 
-ALTER TABLE users ALTER COLUMN salt TYPE bytea USING salt::bytea;
+ALTER TABLE users ALTER COLUMN salt DROP NOT NULL;
+ALTER TABLE restauraunt ALTER COLUMN osmid TYPE BIGINT;
+
+SELECT * FROM users;
+TRUNCATE TABLE restauraunt CASCADE;
