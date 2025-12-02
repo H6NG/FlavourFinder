@@ -12,6 +12,8 @@
   border-right: 1px solid #e6e6e6;
   box-shadow: 4px 0 16px rgba(0, 0, 0, 0.05);
   transition: width 0.3s ease;
+
+  z-index: 1000;
 }
 
 .logo {

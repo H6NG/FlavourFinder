@@ -1,21 +1,36 @@
 
 import NavBar from "./component/navbar";
-import React, { useEffect } from 'react';
-/*
+import React, { useEffect, useRef } from 'react';
 import Map from 'ol/Map';
 import View from 'ol/View';
 import TileLayer from 'ol/layer/Tile';
 import OSM from 'ol/source/OSM';
 import 'ol/ol.css'; 
-*/
+import './app.css';
+
+import { fromLonLat } from 'ol/proj';
 
 export default function App() {
 
+  
+  const mapElement = useRef();
+
+
   useEffect(() => {
+
+    if (!mapElement.current) return;
+
+    
+    // We create the view outside of the map setup so we can update it later.
+    const initialView = new View({
+      center: fromLonLat([0, 0]), // Default center (in case geolocation fails)
+      zoom: 2, 
+    });
+
     // 1. Create the Map instance
     const map = new Map({
       // 2. Target the specific <div> using its ID
-      target: 'demoMap', 
+      target: mapElement.current, 
       
       // 3. Define the layers to show (e.g., OpenStreetMap)
       layers: [
@@ -25,11 +40,37 @@ export default function App() {
       ],
       
       // 4. Set the initial view (center and zoom)
-      view: new View({
-        center: [0, 0], // Coordinates for the center of the map
-        zoom: 2, // Initial zoom level
-      }),
+      view: initialView,
     });
+
+
+    // --- 3. Get User Location (Geolocation API) ---
+    if (navigator.geolocation) {
+      navigator.geolocation.getCurrentPosition(
+        (position) => {
+          // Success callback
+          const lon = position.coords.longitude;
+          const lat = position.coords.latitude;
+          
+          // Convert standard Lat/Lon to the projection OpenLayers uses (Web Mercator)
+          const newCenter = fromLonLat([lon, lat]);
+
+          // Update the map's view to the new location
+          initialView.animate({
+            center: newCenter,
+            duration: 2000, // Smooth transition time in milliseconds
+            zoom: 12,      // Zoom in closer to the local area
+          });
+        },
+        (error) => {
+          // Error callback (e.g., user denied permission)
+          console.warn('Geolocation failed:', error);
+          // The map will remain at the default center [0, 0]
+        }
+      );
+    } else {
+      console.warn("Geolocation is not supported by this browser.");
+    }
 
     // 5. Cleanup Function: This runs when the component is removed from the DOM
     // It is essential for preventing memory leaks when using third-party libraries.
@@ -43,22 +84,19 @@ export default function App() {
   // --- JSX Rendering ---
   return (
     <>
-    
-    <div class="flex-column">
-      <div class="column-item"><NavBar /></div>
-      <div class="column-item">
-           <div className="flex justify-center" style={{ padding: '20px' }}>
-          
-            {/*This is the div where the map will be rendered*/}
-            <div
-              id="demoMap"
-              style={{
-                height: '800px',
-                width: '1080px',
-                border: '1px solid #333'
-              }} />
-          </div>
-        </div>
+
+    <NavBar/>
+
+    <div className="map-content">
+      <div
+        ref={mapElement} // Attach the ref here
+            style={{
+              width: "100%",  // Fill width of parent
+              height: "100%", // Fill height of parent
+            }} 
+          />
+
+
     </div>
     
     </>
