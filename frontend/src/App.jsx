@@ -1,12 +1,13 @@
 
 import NavBar from "./component/navbar";
 import React, { useEffect } from 'react';
+/*
 import Map from 'ol/Map';
 import View from 'ol/View';
 import TileLayer from 'ol/layer/Tile';
 import OSM from 'ol/source/OSM';
 import 'ol/ol.css'; 
-
+*/
 
 export default function App() {
 
@@ -48,7 +49,7 @@ export default function App() {
       <div class="column-item">
            <div className="flex justify-center" style={{ padding: '20px' }}>
           
-            {/* This is the div where the map will be rendered */}
+            {/*This is the div where the map will be rendered*/}
             <div
               id="demoMap"
               style={{

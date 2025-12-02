@@ -17,7 +17,7 @@ createRoot(document.getElementById("root")).render(
         <Route path="/signup" element={<SignUpPage />} />
         <Route path="/login" element={<LoginPage />} />
         <Route path="/app" element= {<App />} />
-        <Route path="/test" element={<Test />} /> 
+        <Route path="/test" element={<Test />} />
       </Routes>
     </Router>
   </StrictMode>
