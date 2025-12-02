@@ -7,6 +7,7 @@ import "./App.css";
 import LoginPage from "./Account/loginPage.jsx"; 
 import SignUpPage from "./Account/signUpPage.jsx";
 import ClientPage from "./mainPage.jsx";
+import Test from "./Test.jsx";
 
 createRoot(document.getElementById("root")).render(
   <StrictMode>
@@ -16,6 +17,7 @@ createRoot(document.getElementById("root")).render(
         <Route path="/signup" element={<SignUpPage />} />
         <Route path="/login" element={<LoginPage />} />
         <Route path="/app" element= {<App />} />
+        <Route path="/test" element={<Test />} /> 
       </Routes>
     </Router>
   </StrictMode>
