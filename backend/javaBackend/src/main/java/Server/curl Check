@@ -4,4 +4,8 @@ curl -X POST \
     "http://localhost:8000/api/v1/restauraunt/recommend-guest" \
     -d '{"currentLocation":{"latitude":49.2659797,"longitude":-123.2464746},"radius":2,"preferences":{"glutenFree":false,"vegetarian":false,"vegan":false}}'
 
-{"currentLocation":{"latitude":49.2659797,"longitude":-123.2464746},"radius":50,"preferences":{"glutenFree":false,"vegetarian":false,"vegan":false}}
+curl -X POST \
+    -H "Accept: application/json" \
+    -H "Content-Type: application/json" \
+    "http://javabackend.bungalou.ca/api/v1/restauraunt/recommend-guest" \
+    -d '{"currentLocation":{"latitude":49.2659797,"longitude":-123.2464746},"radius":2,"preferences":{"glutenFree":false,"vegetarian":false,"vegan":false}}'

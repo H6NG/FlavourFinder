@@ -14,3 +14,8 @@
 # Step 4: Build your app using Gradle (skip tests for faster build)
 # Step 5: Expose the default Spring Boot port
 # Step 6: Run the JAR file //Apparently it'S trying to find a .jar file and run it.
+
+FROM eclipse-temurin:21
+RUN mkdir /opt/app
+COPY ./build/libs/javaBackend-1.0-SNAPSHOT-all.jar /opt/app
+CMD ["java", "-jar", "/opt/app/javaBackend-1.0-SNAPSHOT-all.jar"]
