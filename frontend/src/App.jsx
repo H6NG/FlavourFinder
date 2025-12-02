@@ -10,7 +10,6 @@ import 'ol/ol.css';
 
 export default function App() {
 
-
   useEffect(() => {
     // 1. Create the Map instance
     const map = new Map({
@@ -42,30 +41,25 @@ export default function App() {
 
   // --- JSX Rendering ---
   return (
-    <div className = "flex-container">
-
-
-      <NavBar />
-      
-      <div style={{ padding: '20px' }}>
-        <h2>📍 Global Map Viewer</h2>
-        
-        {/* This is the div where the map will be rendered */}
-        <div 
-          id="demoMap" 
-          style={{ 
-
-            height: '400px', 
-            width: '800px', 
-            border: '1px solid #333' 
-          }}
-        />
-        
-        <p style={{ marginTop: '20px' }}>
-          Map functionality is active above. Click a navigation link to test the sign-in prompt.
-        </p>
-      </div>
+    <>
+    
+    <div class="flex-column">
+      <div class="column-item"><NavBar /></div>
+      <div class="column-item">
+           <div className="flex justify-center" style={{ padding: '20px' }}>
+          
+            {/* This is the div where the map will be rendered */}
+            <div
+              id="demoMap"
+              style={{
+                height: '800px',
+                width: '1080px',
+                border: '1px solid #333'
+              }} />
+          </div>
+        </div>
     </div>
-
+    
+    </>
   );
 }
