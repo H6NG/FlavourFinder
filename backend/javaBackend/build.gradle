@@ -26,3 +26,11 @@ test {
 application {
     mainClass = 'Server.Starter'
 }
+
+jar {
+    manifest {
+        attributes(
+                'Main-Class': application.mainClass
+        )
+    }
+}
