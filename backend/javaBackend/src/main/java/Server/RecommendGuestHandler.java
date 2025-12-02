@@ -1,6 +1,6 @@
 package Server;
 
-import Server.ResponseRequestClasses.recommendRequestParam;
+import Server.ResponseRequestClasses.restaurauntRequestGuest;
 import com.sun.net.httpserver.Headers;
 import com.sun.net.httpserver.HttpExchange;
 import com.sun.net.httpserver.HttpHandler;
@@ -32,12 +32,11 @@ public class RecommendGuestHandler implements HttpHandler {
             // read json content in http post request
             InputStream request = httpExchange.getRequestBody();
             BufferedReader inReader = new BufferedReader(new InputStreamReader(request));
-            recommendRequestParam result = null;
+            restaurauntRequestGuest result = null;
             try {
-                result = new Gson().fromJson(inReader, recommendRequestParam.class);
+                result = new Gson().fromJson(inReader, restaurauntRequestGuest.class);
             } catch(Exception e) {
                 System.err.println("Errored");
-                System.err.println("Json : " + inReader.readLine());
                 System.err.println(e.getMessage());
             }
 

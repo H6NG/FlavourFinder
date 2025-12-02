@@ -2,7 +2,7 @@ package Server.ResponseRequestClasses;
 
 import db_operations.dbPreference;
 
-public record recommendRequestParam (
+public record restaurauntRequestGuest(
         location currentLocation,
         double radius,
         dbPreference preferences
