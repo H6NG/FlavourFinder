@@ -68,6 +68,7 @@ public class RecommendGuestHandler implements HttpHandler {
             ;
 
             httpExchange.getResponseHeaders().add("Content-Type", "application/json");
+            httpExchange.getResponseHeaders().add("Access-Control-Allow-Origin", "*");
             httpExchange.sendResponseHeaders(200, responseString.length());
 
             OutputStream os = httpExchange.getResponseBody();
