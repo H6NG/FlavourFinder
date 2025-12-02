@@ -65,21 +65,32 @@ public class RecommendGuestHandler implements HttpHandler {
             response.add("location", location);
 
             String responseString = response.toString();
-            ;
 
             httpExchange.getResponseHeaders().add("Content-Type", "application/json");
             httpExchange.getResponseHeaders().add("Access-Control-Allow-Origin", "*");
             httpExchange.getResponseHeaders().add("Access-Control-Allow-Headers", "*");
-            httpExchange.getResponseHeaders().add("Access-Control-Allow-Methods", "GET, POST, PUT, DELETE");
+            httpExchange.getResponseHeaders().add("Access-Control-Allow-Methods", "GET, POST, PUT, DELETE, OPTIONS");
             httpExchange.sendResponseHeaders(200, responseString.length());
 
             OutputStream os = httpExchange.getResponseBody();
             os.write(responseString.getBytes());
             os.close();
 
+        } else if (requestedMethod.equals("OPTIONS")){
+            System.out.println("Got into options");
+            httpExchange.getResponseHeaders().add("Allowed", "");
+            httpExchange.getResponseHeaders().add("Access-Control-Allow-Origin", "*");
+            httpExchange.getResponseHeaders().add("Access-Control-Allow-Headers", "*");
+            httpExchange.getResponseHeaders().add("Access-Control-Allow-Methods", "GET, POST, PUT, DELETE, OPTIONS");
+            httpExchange.sendResponseHeaders(204, -1);
+            System.out.println("Heading out of options");
         } else {
             System.err.println("Wrong method for this path!");
+            System.err.println("Method Requested: " + requestedMethod);
+            System.err.println("Request Body: " + httpExchange.getRequestBody().toString());
             httpExchange.sendResponseHeaders(403,0);
         }
+
     }
+
 }

@@ -171,7 +171,6 @@ public class DBConnection {
         List<dbRestauraunt> resList = new ArrayList<>();
 
         while (rs.next()) {
-            System.out.println("While executed");
             dbRestauraunt restauraunt = new dbRestauraunt(
                     rs.getLong("osmid"),
                     rs.getString("resname"),
