@@ -1,10 +1,8 @@
 import React from "react";
-import "./Test.css";
 
 export default function Test() {
 
-    const [data, setData] = React.useState(null);
-
+    // no need for useState if you only want console.log
     const recommend = async () => {
         const body = {
             currentLocation: {
@@ -19,32 +17,49 @@ export default function Test() {
             }
         };
 
-        const res = await fetch(
-            "http://localhost:8000/api/v1/restauraunt/recommend-guest",
-            {
-                method: "POST",
-                headers: {
-                    "Content-Type": "application/json",
-                    Accept: "application/json"
-                },
-                body: JSON.stringify(body)
-            }
-        );
+        try {
+            const res = await fetch(
+                "http://javabackend.bungalou.ca/api/v1/restauraunt/recommend-guest",
+                {
+                    method: "POST",
+                    headers: {
+                        "Content-Type": "application/plain"
+                    },
+                    body: JSON.stringify(body)
+                }
+            );
 
-        const dataFromApi = await res.json();
-        console.log(dataFromApi);
-        setData(dataFromApi);   // <--- store in React state
+            const data = await res.json();
+
+            // 👇 Print API response to console
+            console.log("API RESPONSE:", JSON.stringify(data, null, 2));
+
+        } catch (error) {
+            console.error("ERROR calling API:", error);
+        }
     };
 
     return (
-        <div>
+        <div style={{ padding: "20px" }}>
             <h1>Restaurants</h1>
-            
-            <button onClick={recommend}>Recommend</button>
 
-            <pre>
-                {data && JSON.stringify(data, null, 2)}
-            </pre>
+            {/* CLICKABLE DIV BUTTON */}
+            <div
+                onClick={recommend}
+                style={{
+                    display: "inline-block",
+                    padding: "10px 18px",
+                    backgroundColor: "#2563eb",
+                    color: "white",
+                    borderRadius: "8px",
+                    cursor: "pointer",
+                    userSelect: "none",
+                    fontWeight: "600",
+                    marginTop: "10px",
+                }}
+            >
+                Recommend
+            </div>
         </div>
     );
 }
