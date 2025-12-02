@@ -42,16 +42,16 @@ public class RecommendGuestHandler implements HttpHandler {
             }
 
             // make sure request is actually valid
-            if (result == null || result.getlocation() == null) {
+            if (result == null || result.currentLocation() == null) {
                 httpExchange.sendResponseHeaders(400, -1);
                 throw new RuntimeException("Invalid request");
             }
             // get actual recommendation
             dbRestauraunt recommended = User.getRecommendation(
-                    result.getlocation().getLatitude(),
-                    result.getlocation().getLongitude(),
+                    result.currentLocation().latitude(),
+                    result.currentLocation().longitude(),
                     result.radius(),
-                    result.getPreference());
+                    result.preferences());
 
             // formulate response json
             JsonObject response = new JsonObject();
