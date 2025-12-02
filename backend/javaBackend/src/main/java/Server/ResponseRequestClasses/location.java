@@ -1,8 +1,8 @@
-package Server;
+package Server.ResponseRequestClasses;
 
 public class location {
-    private double latitude;
-    private double longitude;
+    private final double latitude;
+    private final double longitude;
 
     public location(double latitude, double longitude) {
         this.latitude = latitude;
