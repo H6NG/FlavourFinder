@@ -23,7 +23,8 @@ export default function Test() {
                 {
                     method: "POST",
                     headers: {
-                        "Content-Type": "application/plain"
+                        "Content-Type": "application/json",
+                        Accept: "application/json"
                     },
                     body: JSON.stringify(body)
                 }
