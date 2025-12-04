@@ -1,16 +1,18 @@
-import NavBar from "./component/navbar";
+// App.jsx
 import React, { useEffect, useRef, useState } from "react";
 
 import Map from "ol/Map";
 import View from "ol/View";
 import TileLayer from "ol/layer/Tile";
 import OSM from "ol/source/OSM";
-
 import { fromLonLat } from "ol/proj";
+
 import "ol/ol.css";
 import "./App.css";
 
+import NavBar from "./component/navbar";
 import SettingsPage from "./Settings.jsx";
+import HistoryPage from "./getHistory.jsx";
 import useFind from "./Find.jsx";
 
 export default function App() {
@@ -18,9 +20,12 @@ export default function App() {
   const mapInstanceRef = useRef(null);
   const viewRef = useRef(null);
 
+  // "map", "settings", or "history"
   const [currentPage, setCurrentPage] = useState("map");
 
-  // mount map
+  // -----------------------------------------
+  // Mount the OpenLayers map ONCE
+  // -----------------------------------------
   useEffect(() => {
     if (!mapRef.current) return;
 
@@ -42,37 +47,53 @@ export default function App() {
     return () => map.setTarget(undefined);
   }, []);
 
-  // FIX map resize when switching page
+  // Find functionality (GPS + cookies)
+  const runFind = useFind(mapInstanceRef, viewRef);
+
+  // -----------------------------------------
+  // Always call runFind ONLY AFTER map is visible
+  // -----------------------------------------
   useEffect(() => {
     if (currentPage === "map") {
       setTimeout(() => {
-        mapInstanceRef.current?.updateSize();
-      }, 150);
+        if (mapInstanceRef.current) {
+          mapInstanceRef.current.updateSize();
+          console.log("MAP SIZE BEFORE FIND =", mapInstanceRef.current.getSize());
+        }
+        runFind();
+      }, 120);
     }
   }, [currentPage]);
-
-  // Import Find logic
-  const runFind = useFind(mapInstanceRef, viewRef);
 
   return (
     <>
       <NavBar
-        onFind={() => {
-          setCurrentPage("map");
-          runFind();
-        }}
+        onFind={() => setCurrentPage("map")}
+        onHistory={() => setCurrentPage("history")}
         onSettings={() => setCurrentPage("settings")}
       />
 
+      {/* HISTORY PAGE */}
+      {currentPage === "history" && (
+        <div className="content-container">
+          <HistoryPage />
+        </div>
+      )}
+
+      {/* SETTINGS PAGE */}
       {currentPage === "settings" && (
         <div className="content-container">
           <SettingsPage />
         </div>
       )}
 
+      {/* MAP PAGE */}
       {currentPage === "map" && (
         <div className="map-content">
-          <div ref={mapRef} style={{ width: "100%", height: "100%" }} />
+          <div
+            ref={mapRef}
+            style={{ width: "100%", height: "100%", position: "relative" }}
+          />
         </div>
       )}
     </>

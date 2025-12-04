@@ -1,63 +1,84 @@
-// Find.jsx
-import { detectDeviceType } from "./utility/detectDevice.js";
+// Find.jsx (TEST VERSION)
 import { getUserLocation } from "./utility/getUserLocation.js";
 import { getCookie, setCookie } from "./utility/cookies.js";
 
+const UBC_LAT = 49.2606;
+const UBC_LON = -123.2460;
+
 export default function useFind(mapInstanceRef, viewRef) {
-
-  // This function is returned to App.jsx
   const runFind = async () => {
-    try {
-      console.log("DEVICE =", detectDeviceType());
+    console.log("=== FIND START ===");
 
-      // -----------------------------
-      // 1. Try using cached location
-      // -----------------------------
+    try {
       let lat = getCookie("latitude");
       let lon = getCookie("longitude");
 
-      if (!lat || !lon) {
-        console.log("Cookies missing → requesting GPS...");
-        const pos = await getUserLocation();
+      console.log("COOKIE lat/lon =", lat, lon);
 
-        lat = pos.lat;
-        lon = pos.lon;
-
-        // Save location to cookie for 60 min
-        setCookie("latitude", lat, 60);
-        setCookie("longitude", lon, 60);
-
-        console.log("Saved GPS → cookies:", lat, lon);
-      } else {
-        console.log("Using cookie location:", lat, lon);
-        lat = parseFloat(lat);
-        lon = parseFloat(lon);
+      // Parse cookie if exists
+      if (lat && lon) {
+        lat = Number(lat);
+        lon = Number(lon);
+        console.log("PARSED cookie lat/lon =", lat, lon);
       }
 
-      // -----------------------------
-      // 2. Move map to user location
-      // -----------------------------
+      // If cookie invalid or missing → try GPS
+      if (!lat || !lon || Number.isNaN(lat) || Number.isNaN(lon)) {
+        console.log("Cookie invalid → Requesting GPS…");
+
+        try {
+          const pos = await getUserLocation();
+          lat = pos.lat;
+          lon = pos.lon;
+
+          console.log("GPS SUCCESS =", lat, lon);
+
+          setCookie("latitude", lat, 60);
+          setCookie("longitude", lon, 60);
+        } catch (err) {
+          console.log("GPS FAILED → Using UBC fallback");
+          lat = UBC_LAT;
+          lon = UBC_LON;
+        }
+      }
+
+      console.log("FINAL lat/lon =", lat, lon);
+
+      // Convert to WebMercator
+      const toMercator = (deg) => deg * (Math.PI / 180) * 6378137;
+      const center = [toMercator(lon), toMercator(lat)];
+
+      console.log("CENTER COORDS (WebMercator) =", center);
+
+      if (Number.isNaN(center[0]) || Number.isNaN(center[1])) {
+        console.error("CENTER IS NaN → STOPPING");
+        return;
+      }
+
+      // Move map
       if (viewRef.current) {
+        console.log("Animating map view…");
         viewRef.current.animate({
-          center: [lon, lat].map((c, i) => 
-            i === 0 ? c * (Math.PI/180)*6378137 : c * (Math.PI/180)*6378137
-          ),
+          center,
           zoom: 14,
           duration: 1000,
         });
+      } else {
+        console.log("viewRef is NULL!");
       }
 
-      // -----------------------------
-      // 3. Ensure map resizes properly
-      // -----------------------------
+      // Force redraw
       setTimeout(() => {
+        console.log("Updating map size + render");
         mapInstanceRef.current?.updateSize();
-      }, 200);
+        mapInstanceRef.current?.render();
+      }, 150);
 
-    } catch (err) {
-      console.error("FIND ERROR", err);
-      alert("Unable to retrieve location.");
+    } catch (error) {
+      console.error("FIND ERROR:", error);
     }
+
+    console.log("=== FIND END ===");
   };
 
   return runFind;
