@@ -18,11 +18,13 @@ from bson import ObjectId
 
 app = Flask(__name__); 
 
-CORS(app, resources={
+CORS(app)
+     
+""", resources={
     r"/*": {
         "origins": ["https://c2tp.onrender.com"]
     }
-})
+})"""
 
 load_dotenv(); 
 
