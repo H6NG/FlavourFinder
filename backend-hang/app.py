@@ -11,6 +11,7 @@ from passlib.hash import argon2
 import psycopg2
 import os
 import ssl
+from pymongo import MongoClient
 
 app = Flask(__name__); 
 CORS(app); 
@@ -27,6 +28,19 @@ db_password = os.getenv("db_password")
 db_port = os.getenv("db_port")
 
 
+uri_mongo = os.getenv("uri_mango")
+mango_db = os.getenv("MONGO_DB")
+
+try: 
+
+    client = MongoClient(uri_mongo)
+    db = client[mango_db]
+
+except Exception as e: 
+
+    print("Error:", e)
+
+print("Connected to MangoDB")
 # Connection with the SQL postgres database 
 try: 
     connection =  psycopg2.connect(
