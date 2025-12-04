@@ -112,10 +112,18 @@ def registerUser():
     password = data.get("password")
     first = data.get("firstName")
     last = data.get("lastName")
+    glutenFree = data.get("glutenFree", False)
+    vegetarian = data.get("vegetarian", False)
+    vegan = data.get("vegan", False)
+    favoriteCuisine = data.get("favouriteCuisine", [])
+    
 
     if not all([email, username, password, first, last]):
             return jsonify({"error": "Missing required fields"}), 400
     
+    if "@" not in email:
+        return jsonify({"error": "Invalid email format"}), 400
+
     existing = users_collection.find_one({"email": email})
     if existing:
         return jsonify({"error": "Email already registered"}), 409
@@ -131,10 +139,11 @@ def registerUser():
             "firstName": first,
             "lastName": last,
             "preferences": {
-                "glutenFree": False,
-                "vegetarian": False,
-                "vegan": False
+                "glutenFree": glutenFree,
+                "vegetarian": vegetarian,
+                "vegan": vegan
             },
+            "favoriteCuisine": favoriteCuisine,
             "createdAt": datetime.now(timezone.utc)
         }
 
