@@ -1,4 +1,5 @@
 import React, { useRef } from "react";
+import './signUp.css'; 
 
 export default function SignUpPage() {
 
