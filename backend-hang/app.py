@@ -12,7 +12,7 @@ import psycopg2
 import os
 import ssl
 from pymongo import MongoClient
-from datetime import datetime
+from datetime import datetime, timezone
 
 app = Flask(__name__); 
 CORS(app); 
@@ -135,7 +135,7 @@ def registerUser():
                 "vegetarian": False,
                 "vegan": False
             },
-            "createdAt": datetime.utcnow()
+            "createdAt": datetime.now(timezone.utc)
         }
 
         result = users_collection.insert_one(user_doc)
