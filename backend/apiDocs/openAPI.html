@@ -1513,7 +1513,9 @@ pub fn main() {
                           <div class="tab-pane active" id="examples-Rank-getChoices-0-curl">
                             <pre class="prettyprint"><code class="language-bsh">curl -X GET \
  -H "Accept: application/json" \
- "http://localhost/api/v1/rank/choice"
+ -H "Content-Type: application/json" \
+ "http://localhost/api/v1/rank/choice" \
+ -d ''
 </code></pre>
                           </div>
                           <div class="tab-pane" id="examples-Rank-getChoices-0-java">
@@ -1530,9 +1532,10 @@ public class RankApiExample {
 
         // Create an instance of the API class
         RankApi apiInstance = new RankApi();
+        Location location = ; // Location | 
 
         try {
-            restaurauntChoiceOffer result = apiInstance.getChoices();
+            restaurauntChoiceOffer result = apiInstance.getChoices(location);
             System.out.println(result);
         } catch (ApiException e) {
             System.err.println("Exception when calling RankApi#getChoices");
@@ -1548,9 +1551,10 @@ public class RankApiExample {
 
 final api_instance = DefaultApi();
 
+final Location location = new Location(); // Location | 
 
 try {
-    final result = await api_instance.getChoices();
+    final result = await api_instance.getChoices(location);
     print(result);
 } catch (e) {
     print('Exception when calling DefaultApi->getChoices: $e\n');
@@ -1565,9 +1569,10 @@ try {
 public class RankApiExample {
     public static void main(String[] args) {
         RankApi apiInstance = new RankApi();
+        Location location = ; // Location | 
 
         try {
-            restaurauntChoiceOffer result = apiInstance.getChoices();
+            restaurauntChoiceOffer result = apiInstance.getChoices(location);
             System.out.println(result);
         } catch (ApiException e) {
             System.err.println("Exception when calling RankApi#getChoices");
@@ -1585,10 +1590,11 @@ public class RankApiExample {
 
 // Create an instance of the API class
 RankApi *apiInstance = [[RankApi alloc] init];
+Location *location = ; //  (optional)
 
 // Fetch Choices
-[apiInstance getChoicesWithCompletionHandler: 
-              ^(restaurauntChoiceOffer output, NSError* error) {
+[apiInstance getChoicesWith:location
+              completionHandler: ^(restaurauntChoiceOffer output, NSError* error) {
     if (output) {
         NSLog(@"%@", output);
     }
@@ -1604,6 +1610,10 @@ RankApi *apiInstance = [[RankApi alloc] init];
 
 // Create an instance of the API class
 var api = new FlavourFinderApiDocs.RankApi()
+var opts = {
+  'location':  // {Location} 
+};
+
 var callback = function(error, data, response) {
   if (error) {
     console.error(error);
@@ -1611,7 +1621,7 @@ var callback = function(error, data, response) {
     console.log('API called successfully. Returned data: ' + data);
   }
 };
-api.getChoices(callback);
+api.getChoices(opts, callback);
 </code></pre>
                             </div>
 
@@ -1634,10 +1644,11 @@ namespace Example
 
             // Create an instance of the API class
             var apiInstance = new RankApi();
+            var location = new Location(); // Location |  (optional) 
 
             try {
                 // Fetch Choices
-                restaurauntChoiceOffer result = apiInstance.getChoices();
+                restaurauntChoiceOffer result = apiInstance.getChoices(location);
                 Debug.WriteLine(result);
             } catch (Exception e) {
                 Debug.Print("Exception when calling RankApi.getChoices: " + e.Message );
@@ -1654,9 +1665,10 @@ require_once(__DIR__ . '/vendor/autoload.php');
 
 // Create an instance of the API class
 $api_instance = new OpenAPITools\Client\Api\RankApi();
+$location = ; // Location | 
 
 try {
-    $result = $api_instance->getChoices();
+    $result = $api_instance->getChoices($location);
     print_r($result);
 } catch (Exception $e) {
     echo 'Exception when calling RankApi->getChoices: ', $e->getMessage(), PHP_EOL;
@@ -1671,9 +1683,10 @@ use WWW::OPenAPIClient::RankApi;
 
 # Create an instance of the API class
 my $api_instance = WWW::OPenAPIClient::RankApi->new();
+my $location = WWW::OPenAPIClient::Object::Location->new(); # Location | 
 
 eval {
-    my $result = $api_instance->getChoices();
+    my $result = $api_instance->getChoices(location => $location);
     print Dumper($result);
 };
 if ($@) {
@@ -1690,10 +1703,11 @@ from pprint import pprint
 
 # Create an instance of the API class
 api_instance = openapi_client.RankApi()
+location =  # Location |  (optional)
 
 try:
     # Fetch Choices
-    api_response = api_instance.get_choices()
+    api_response = api_instance.get_choices(location=location)
     pprint(api_response)
 except ApiException as e:
     print("Exception when calling RankApi->getChoices: %s\n" % e)</code></pre>
@@ -1703,9 +1717,10 @@ except ApiException as e:
                               <pre class="prettyprint"><code class="language-rust">extern crate RankApi;
 
 pub fn main() {
+    let location = ; // Location
 
     let mut context = RankApi::Context::default();
-    let result = client.getChoices(&context).wait();
+    let result = client.getChoices(location, &context).wait();
 
     println!("{:?}", result);
 }
@@ -1722,6 +1737,53 @@ pub fn main() {
 
 
 
+                            <div class="methodsubtabletitle">Body parameters</div>
+                            <table id="methodsubtable">
+                              <tr>
+                                <th width="150px">Name</th>
+                                <th>Description</th>
+                              </tr>
+                                <tr><td style="width:150px;">location </td>
+<td>
+<p class="marked"></p>
+<script>
+$(document).ready(function() {
+  var schemaWrapper = {
+  "content" : {
+    "application/json" : {
+      "schema" : {
+        "$ref" : "#/components/schemas/location"
+      }
+    }
+  }
+};
+
+  var schema = findNode('schema',schemaWrapper).schema;
+  if (!schema) {
+    schema = schemaWrapper.schema;
+  }
+  if (schema.$ref != null) {
+    schema = defsParser.$refs.get(schema.$ref);
+  } else if (schema.items != null && schema.items.$ref != null) {
+    schema.items = defsParser.$refs.get(schema.items.$ref);
+  } else {
+    schemaWrapper.definitions = Object.assign({}, defs);
+    $RefParser.dereference(schemaWrapper).catch(function(err) {
+      console.log(err);
+    });
+  }
+
+  var view = new JSONSchemaView(schema,2,{isBodyParam: true});
+  var result = $('#d2e199_getChoices_location');
+  result.empty();
+  result.append(view.render());
+});
+</script>
+<div id="d2e199_getChoices_location"></div>
+</td>
+</tr>
+
+                            </table>
 
 
 

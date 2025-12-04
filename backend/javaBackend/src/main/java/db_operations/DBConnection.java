@@ -8,10 +8,7 @@ import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
 import java.sql.*;
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 
 public class DBConnection {
     private static DBConnection DBConnection = new DBConnection();
@@ -137,6 +134,7 @@ public class DBConnection {
     public static List<dbRestauraunt> getRestauraunts(double latitude, double longitude, double radius) throws java.sql.SQLException{
         PreparedStatement getRes = connection.prepareStatement(
                 "SELECT\n" +
+                        "\trestid,\n" +
                         "\tresname,\n" +
                         "\tosmid,\n" +
                         "--\tglutenfree,\n" +
@@ -160,9 +158,7 @@ public class DBConnection {
         );
 
         getRes.setDouble(1, latitude);
-        System.out.println("Latitude: " + latitude);
         getRes.setDouble(2, longitude);
-        System.out.println("Longittude: " + longitude);
         getRes.setDouble(3, latitude);
         getRes.setDouble(4, longitude);
         getRes.setDouble(5, radius);
@@ -173,6 +169,7 @@ public class DBConnection {
 
         while (rs.next()) {
             dbRestauraunt restauraunt = new dbRestauraunt(
+                    rs.getLong("restid"),
                     rs.getLong("osmid"),
                     rs.getString("resname"),
 //                    new dbPreference(
@@ -192,8 +189,17 @@ public class DBConnection {
     }
 
     //
-    public static void addOptionChoice(ChoiceOptions options) {
+    public static void addOptionChoice(ChoiceOptions options) throws SQLException {
+        PreparedStatement insertChoiceOption = connection.prepareStatement(
+                "INSERT INTO choiceoffering (offeringid, rest1id, rest2id, rest3id, timeofferd) VALUES\n" +
+                        "(?, ?, ?, ?, CURRENT_TIMESTAMP);"
+        );
+        insertChoiceOption.setObject(1, options.offeringID());
+        insertChoiceOption.setLong(2, options.res1().dbID());
+        insertChoiceOption.setLong(3, options.res2().dbID());
+        insertChoiceOption.setLong(4, options.res3().dbID());
 
+        insertChoiceOption.executeUpdate();
     }
 
 //    public boolean addUser(String username, Password hashedPassword) {

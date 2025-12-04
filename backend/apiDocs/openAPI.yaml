@@ -242,6 +242,11 @@ paths:
       tags: 
         - rank
       parameters: []
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/location"
       responses:
         200:
           description: ""

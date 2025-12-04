@@ -18,15 +18,15 @@ INSERT INTO preference (glutenfree, vegetarian, vegan) VALUES
 SELECT
 	resname,
 	osmid,
-	glutenfree,
-	vegetarian,
-	vegan,
+--	glutenfree,
+--	vegetarian,
+--	vegan,
     earth_distance(
         ll_to_earth(restauraunt.locatLat, restauraunt.locatLong),
         ll_to_earth(0, 0)
     )::integer/1000 AS distance_kilometers
 FROM restauraunt
-INNER JOIN preference ON preference.prefid = restauraunt.prefid
+--INNER JOIN preference ON preference.prefid = restauraunt.prefid
 WHERE
     earth_distance(
         ll_to_earth(locatLat, locatLong),

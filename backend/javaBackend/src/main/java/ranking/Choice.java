@@ -47,9 +47,17 @@ public class Choice {
                 restaurauntList.get(randomIndices.get(0)),
                 restaurauntList.get(randomIndices.get(1)),
                 restaurauntList.get(randomIndices.get(2)),
-                UUID.randomUUID().toString()
+                UUID.randomUUID()
         );
 
+        try {
+            DBConnection.addOptionChoice(returnOpts);
+        } catch (SQLException e) {
+            System.err.println("Error adding choice to database");
+            System.err.println(e.getMessage());
+            throw new RuntimeException(e);
+        }
+        return returnOpts;
 
     }
 }

@@ -22,9 +22,15 @@ public class GetChoiceHandler implements HttpHandler {
         if (requestedMethod.equals("GET")) {
             // verify header that it is json
             Headers header = httpExchange.getRequestHeaders();
-            String contentType = header.get("Content-Type").toString();
-            if (!contentType.equals("[application/json]")) {
-                System.err.println("Wrong content type");
+            String acceptType = "hi";
+            try {
+                acceptType = header.get("Accept").toString();
+            } catch (RuntimeException e) {
+                System.err.println("Something went wrong in header get");
+                System.err.println(header.keySet());
+            }
+            if (!acceptType.equals("[application/json]")) {
+                System.err.println("Wrong accept type");
             }
 
             // read json content in http post request
@@ -36,6 +42,7 @@ public class GetChoiceHandler implements HttpHandler {
             } catch(Exception e) {
                 System.err.println("Errored");
                 System.err.println(e.getMessage());
+                throw new RuntimeException(e);
             }
 
             // make sure request is actually valid
@@ -45,7 +52,10 @@ public class GetChoiceHandler implements HttpHandler {
             }
 
             // get actual recommendation
-            ChoiceOptions options = Choice.getChoices(result.latitude(), result.longitude());
+            ChoiceOptions options = Choice.getChoices(
+                    result.latitude(),
+                    result.longitude()
+            );
 
             // formulate response json
             restaurauntChoiceResponse resObj = new restaurauntChoiceResponse(
@@ -64,8 +74,9 @@ public class GetChoiceHandler implements HttpHandler {
                             null,
                             new location(options.res3().latitude(), options.res3().longitude())
                     ),
-                    options.offeringID()
+                    options.offeringID().toString()
             );
+
 
             // convert json to response text
             Gson gson = new Gson();
