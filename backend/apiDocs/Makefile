@@ -1,5 +1,5 @@
 # openapi-generator-cli to generate html documentation about API specs
 
-openAPI.html:
+openAPI.html: openAPI.yaml
 	openapi-generator-cli generate -g html2 -i openAPI.yaml -o .
 	mv index.html openAPI.html
