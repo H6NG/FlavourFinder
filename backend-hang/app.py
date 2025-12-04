@@ -28,19 +28,18 @@ db_password = os.getenv("db_password")
 db_port = os.getenv("db_port")
 
 
-uri_mongo = os.getenv("uri_mango")
-mango_db = os.getenv("MONGO_DB")
+mongo_uri = os.getenv("MONGO_URI")
+mongo_db = os.getenv("MONGO_DB")
 
 try: 
-
-    client = MongoClient(uri_mongo)
-    db = client[mango_db]
+    client = MongoClient(mongo_uri)
+    db = client[mongo_db]
+    print("Connected to MangoDB")
 
 except Exception as e: 
 
     print("Error:", e)
 
-print("Connected to MangoDB")
 # Connection with the SQL postgres database 
 try: 
     connection =  psycopg2.connect(
@@ -103,46 +102,7 @@ def getUserSelf():
 
 @app.route('/api/registerUser', methods = ['POST'])
 def registerUser():
-    data = request.get_json()
-
-    email = data.get("email")
-    userName = data.get("userName")
-    password = data.get("password")
-    token = data.get("token")
-    firstName = data.get("firstName", "Hang")   
-    lastName = data.get("lastName", "Liu")
-    preferenceID = None
-
-    if not email or not userName or not password:
-        return jsonify({"error": "Missing required fields."}), 400
-    
-    hashed_pw = argon2.hash(password)
-
-    try:
-        cur = connection.cursor()
-        cur.execute("""
-            INSERT INTO users
-            (email, userName, pwhash)
-            VALUES (%s, %s, %s, %s)
-            RETURNING id;
-        """, (email, userName, hashed_pw))
-
-        user_id = cur.fetchone()[0]
-        connection.commit()
-        cur.close()
-
-        access_token = create_access_token(identity=user_id)
-
-        return jsonify({
-            "id": user_id,
-            "email": email,
-            "name": userName,
-            "token": access_token
-        }), 201
-
-    except Exception as e:
-        print("Database error:", e)
-        return jsonify({"error": "User may already exist!"}), 409
+    pass
 
 @app.route('/api/updatePreferences', methods = ['PUT'])
 def updatePreferences():
