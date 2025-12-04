@@ -12,6 +12,7 @@ import psycopg2
 import os
 import ssl
 from pymongo import MongoClient
+from datetime import datetime
 
 app = Flask(__name__); 
 CORS(app); 
@@ -30,10 +31,12 @@ db_port = os.getenv("db_port")
 
 mongo_uri = os.getenv("MONGO_URI")
 mongo_db = os.getenv("MONGO_DB")
+mongo_collection = os.getenv("MONGO_COLLECTION")
 
 try: 
     client = MongoClient(mongo_uri)
     db = client[mongo_db]
+    users_collection = db[mongo_collection]
     print("Connected to MangoDB")
 
 except Exception as e: 
@@ -102,7 +105,49 @@ def getUserSelf():
 
 @app.route('/api/registerUser', methods = ['POST'])
 def registerUser():
-    pass
+    
+    data = request.get_json(silent=True) or {}
+    email = data.get("email")
+    username = data.get("userName")
+    password = data.get("password")
+    first = data.get("firstName")
+    last = data.get("lastName")
+
+    if not all([email, username, password, first, last]):
+            return jsonify({"error": "Missing required fields"}), 400
+    
+    existing = users_collection.find_one({"email": email})
+    if existing:
+        return jsonify({"error": "Email already registered"}), 409
+
+    try:
+        
+        password_hash = argon2.hash(password)
+
+        user_doc = {
+            "email": email,
+            "userName": username,
+            "passwordHash": password_hash,
+            "firstName": first,
+            "lastName": last,
+            "preferences": {
+                "glutenFree": False,
+                "vegetarian": False,
+                "vegan": False
+            },
+            "createdAt": datetime.utcnow()
+        }
+
+        result = users_collection.insert_one(user_doc)
+
+        return jsonify({
+            "message": "User registered successfully",
+            "userId": str(result.inserted_id)
+        }), 201
+
+    except Exception as e:
+        return jsonify({"error": str(e)}), 500
+    
 
 @app.route('/api/updatePreferences', methods = ['PUT'])
 def updatePreferences():
