@@ -1,85 +1,40 @@
-// Find.jsx (TEST VERSION)
-import { getUserLocation } from "./utility/getUserLocation.js";
-import { getCookie, setCookie } from "./utility/cookies.js";
+// Find.jsx — Leaflet map inside this file
+import React, { useEffect } from "react";
+import { MapContainer, TileLayer, useMap } from "react-leaflet";
+import "leaflet/dist/leaflet.css";
 
+// UBC location
 const UBC_LAT = 49.2606;
 const UBC_LON = -123.2460;
 
-export default function useFind(mapInstanceRef, viewRef) {
-  const runFind = async () => {
-    console.log("=== FIND START ===");
+// This small internal component recenters the map when Find is clicked
+function RecenterOnFind({ trigger }) {
+  const map = useMap();
 
-    try {
-      let lat = getCookie("latitude");
-      let lon = getCookie("longitude");
-
-      console.log("COOKIE lat/lon =", lat, lon);
-
-      // Parse cookie if exists
-      if (lat && lon) {
-        lat = Number(lat);
-        lon = Number(lon);
-        console.log("PARSED cookie lat/lon =", lat, lon);
-      }
-
-      // If cookie invalid or missing → try GPS
-      if (!lat || !lon || Number.isNaN(lat) || Number.isNaN(lon)) {
-        console.log("Cookie invalid → Requesting GPS…");
-
-        try {
-          const pos = await getUserLocation();
-          lat = pos.lat;
-          lon = pos.lon;
-
-          console.log("GPS SUCCESS =", lat, lon);
-
-          setCookie("latitude", lat, 60);
-          setCookie("longitude", lon, 60);
-        } catch (err) {
-          console.log("GPS FAILED → Using UBC fallback");
-          lat = UBC_LAT;
-          lon = UBC_LON;
-        }
-      }
-
-      console.log("FINAL lat/lon =", lat, lon);
-
-      // Convert to WebMercator
-      const toMercator = (deg) => deg * (Math.PI / 180) * 6378137;
-      const center = [toMercator(lon), toMercator(lat)];
-
-      console.log("CENTER COORDS (WebMercator) =", center);
-
-      if (Number.isNaN(center[0]) || Number.isNaN(center[1])) {
-        console.error("CENTER IS NaN → STOPPING");
-        return;
-      }
-
-      // Move map
-      if (viewRef.current) {
-        console.log("Animating map view…");
-        viewRef.current.animate({
-          center,
-          zoom: 14,
-          duration: 1000,
-        });
-      } else {
-        console.log("viewRef is NULL!");
-      }
-
-      // Force redraw
-      setTimeout(() => {
-        console.log("Updating map size + render");
-        mapInstanceRef.current?.updateSize();
-        mapInstanceRef.current?.render();
-      }, 150);
-
-    } catch (error) {
-      console.error("FIND ERROR:", error);
+  useEffect(() => {
+    if (trigger > 0) {
+      console.log("Re-centering map to UBC…");
+      map.setView([UBC_LAT, UBC_LON], 15);
     }
+  }, [trigger]);
 
-    console.log("=== FIND END ===");
-  };
+  return null;
+}
 
-  return runFind;
+export default function Find({ trigger }) {
+  return (
+    <MapContainer
+      center={[UBC_LAT, UBC_LON]}
+      zoom={14}
+      style={{ width: "100%", height: "100%" }}
+    >
+      <TileLayer
+        url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
+        attribution="© OpenStreetMap"
+      />
+
+      {/* Recenter when user clicks Find */}
+      <RecenterOnFind trigger={trigger} />
+    </MapContainer>
+  );
 }

@@ -1,69 +1,26 @@
-// App.jsx
-import React, { useEffect, useRef, useState } from "react";
+// App.jsx — FINAL LEAFLET VERSION
+import React, { useState } from "react";
 
-import Map from "ol/Map";
-import View from "ol/View";
-import TileLayer from "ol/layer/Tile";
-import OSM from "ol/source/OSM";
-import { fromLonLat } from "ol/proj";
-
-import "ol/ol.css";
 import "./App.css";
 
 import NavBar from "./component/navbar";
-import SettingsPage from "./Settings.jsx";
-import HistoryPage from "./getHistory.jsx";
-import RatePage from "./Rate.jsx";
-import FeedPage from "./Feed.jsx";   // <-- Feed only
-import useFind from "./Find.jsx";
+import SettingsPage from "./Settings";
+import HistoryPage from "./getHistory";
+import RatePage from "./Rate";
+import FeedPage from "./Feed";
+import Find from "./Find"; // <--- Leaflet map inside Find.jsx
 
 export default function App() {
-  const mapRef = useRef();
-  const mapInstanceRef = useRef(null);
-  const viewRef = useRef(null);
-
-  // pages: map, feed, rate, history, settings
   const [currentPage, setCurrentPage] = useState("map");
-
-  // -----------------------------------------
-  // Mount map
-  // -----------------------------------------
-  useEffect(() => {
-    if (!mapRef.current) return;
-
-    const view = new View({
-      center: fromLonLat([0, 0]),
-      zoom: 2,
-    });
-
-    viewRef.current = view;
-
-    const map = new Map({
-      target: mapRef.current,
-      layers: [new TileLayer({ source: new OSM() })],
-      view,
-    });
-
-    mapInstanceRef.current = map;
-
-    return () => map.setTarget(undefined);
-  }, []);
-
-  const runFind = useFind(mapInstanceRef, viewRef);
-
-  useEffect(() => {
-    if (currentPage === "map") {
-      setTimeout(() => {
-        mapInstanceRef.current?.updateSize();
-        runFind();
-      }, 120);
-    }
-  }, [currentPage]);
+  const [findTrigger, setFindTrigger] = useState(0); 
 
   return (
     <>
       <NavBar
-        onFind={() => setCurrentPage("map")}
+        onFind={() => {
+          setCurrentPage("map");
+          setFindTrigger((n) => n + 1); // triggers recenter in Find.jsx
+        }}
         onFeed={() => setCurrentPage("feed")}
         onRate={() => setCurrentPage("rate")}
         onHistory={() => setCurrentPage("history")}
@@ -98,13 +55,10 @@ export default function App() {
         </div>
       )}
 
-      {/* MAP PAGE */}
+      {/* MAP PAGE — Leaflet */}
       {currentPage === "map" && (
-        <div className="map-content">
-          <div
-            ref={mapRef}
-            style={{ width: "100%", height: "100%", position: "relative" }}
-          />
+        <div className="map-content" style={{ height: "100%", width: "100%" }}>
+          <Find trigger={findTrigger} />
         </div>
       )}
     </>
