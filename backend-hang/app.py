@@ -4,6 +4,7 @@ from dotenv import load_dotenv
 from flask_jwt_extended import (
     JWTManager,
     create_access_token,
+    create_refresh_token,
     jwt_required,
     get_jwt_identity
 )
@@ -338,13 +339,41 @@ def updateUserInfo():
     }), 200
 
 
-@app.route('/api/userLogin', methods = ['POST'])
+@app.route('/api/userLogin', methods=['POST'])
 def userLogin():
-    pass
+    data = request.get_json(silent=True) or {}
 
-@app.route('/api/userLogout', methods = ['POST'])
+    email = data.get("email")
+    password = data.get("password")
+
+    if not email or not password:
+        return jsonify({"error": "Email and password required"}), 400
+
+    user = users_collection.find_one({"email": email})
+    if not user:
+        return jsonify({"error": "Invalid email or password"}), 401
+
+    try:
+        if not argon2.verify(password, user["passwordHash"]):
+            return jsonify({"error": "Invalid email or password"}), 401
+    except:
+        return jsonify({"error": "Invalid email or password"}), 401
+
+    access = create_access_token(identity=str(user["_id"]))
+    refresh = create_refresh_token(identity=str(user["_id"]))
+
+    return jsonify({
+        "message": "Login successful",
+        "accessToken": access,
+        "refreshToken": refresh
+    }), 200
+
+
+@app.route('/api/userLogout', methods=['POST'])
+@jwt_required()
 def userLogout():
-    pass
+    return jsonify({"message": "Logged out successfully"}), 200
+
 
 @app.route('/api/addHistory', methods=['POST'])
 @jwt_required()
