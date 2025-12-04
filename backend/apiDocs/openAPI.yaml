@@ -241,12 +241,17 @@ paths:
       description: "Gets the choices from the server for the user to choose from"
       tags: 
         - rank
-      parameters: []
-      requestBody:
-        content:
-          application/json:
-            schema:
-              $ref: "#/components/schemas/location"
+      parameters:
+        - in: query
+          name: latitude
+          schema:
+            type: number
+          description: "Latitude of the user's location"
+        - in: query
+          name: longitude
+          schema:
+            type: number
+          description: "Longitude of the user's location"
       responses:
         200:
           description: ""

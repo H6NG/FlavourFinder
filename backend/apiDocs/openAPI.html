@@ -1513,9 +1513,7 @@ pub fn main() {
                           <div class="tab-pane active" id="examples-Rank-getChoices-0-curl">
                             <pre class="prettyprint"><code class="language-bsh">curl -X GET \
  -H "Accept: application/json" \
- -H "Content-Type: application/json" \
- "http://localhost/api/v1/rank/choice" \
- -d ''
+ "http://localhost/api/v1/rank/choice?latitude=8.14&longitude=8.14"
 </code></pre>
                           </div>
                           <div class="tab-pane" id="examples-Rank-getChoices-0-java">
@@ -1532,10 +1530,11 @@ public class RankApiExample {
 
         // Create an instance of the API class
         RankApi apiInstance = new RankApi();
-        Location location = ; // Location | 
+        BigDecimal latitude = 8.14; // BigDecimal | Latitude of the user's location
+        BigDecimal longitude = 8.14; // BigDecimal | Longitude of the user's location
 
         try {
-            restaurauntChoiceOffer result = apiInstance.getChoices(location);
+            restaurauntChoiceOffer result = apiInstance.getChoices(latitude, longitude);
             System.out.println(result);
         } catch (ApiException e) {
             System.err.println("Exception when calling RankApi#getChoices");
@@ -1551,10 +1550,11 @@ public class RankApiExample {
 
 final api_instance = DefaultApi();
 
-final Location location = new Location(); // Location | 
+final BigDecimal latitude = new BigDecimal(); // BigDecimal | Latitude of the user's location
+final BigDecimal longitude = new BigDecimal(); // BigDecimal | Longitude of the user's location
 
 try {
-    final result = await api_instance.getChoices(location);
+    final result = await api_instance.getChoices(latitude, longitude);
     print(result);
 } catch (e) {
     print('Exception when calling DefaultApi->getChoices: $e\n');
@@ -1569,10 +1569,11 @@ try {
 public class RankApiExample {
     public static void main(String[] args) {
         RankApi apiInstance = new RankApi();
-        Location location = ; // Location | 
+        BigDecimal latitude = 8.14; // BigDecimal | Latitude of the user's location
+        BigDecimal longitude = 8.14; // BigDecimal | Longitude of the user's location
 
         try {
-            restaurauntChoiceOffer result = apiInstance.getChoices(location);
+            restaurauntChoiceOffer result = apiInstance.getChoices(latitude, longitude);
             System.out.println(result);
         } catch (ApiException e) {
             System.err.println("Exception when calling RankApi#getChoices");
@@ -1590,10 +1591,12 @@ public class RankApiExample {
 
 // Create an instance of the API class
 RankApi *apiInstance = [[RankApi alloc] init];
-Location *location = ; //  (optional)
+BigDecimal *latitude = 8.14; // Latitude of the user's location (optional) (default to null)
+BigDecimal *longitude = 8.14; // Longitude of the user's location (optional) (default to null)
 
 // Fetch Choices
-[apiInstance getChoicesWith:location
+[apiInstance getChoicesWith:latitude
+    longitude:longitude
               completionHandler: ^(restaurauntChoiceOffer output, NSError* error) {
     if (output) {
         NSLog(@"%@", output);
@@ -1611,7 +1614,8 @@ Location *location = ; //  (optional)
 // Create an instance of the API class
 var api = new FlavourFinderApiDocs.RankApi()
 var opts = {
-  'location':  // {Location} 
+  'latitude': 8.14, // {BigDecimal} Latitude of the user's location
+  'longitude': 8.14 // {BigDecimal} Longitude of the user's location
 };
 
 var callback = function(error, data, response) {
@@ -1644,11 +1648,12 @@ namespace Example
 
             // Create an instance of the API class
             var apiInstance = new RankApi();
-            var location = new Location(); // Location |  (optional) 
+            var latitude = 8.14;  // BigDecimal | Latitude of the user's location (optional)  (default to null)
+            var longitude = 8.14;  // BigDecimal | Longitude of the user's location (optional)  (default to null)
 
             try {
                 // Fetch Choices
-                restaurauntChoiceOffer result = apiInstance.getChoices(location);
+                restaurauntChoiceOffer result = apiInstance.getChoices(latitude, longitude);
                 Debug.WriteLine(result);
             } catch (Exception e) {
                 Debug.Print("Exception when calling RankApi.getChoices: " + e.Message );
@@ -1665,10 +1670,11 @@ require_once(__DIR__ . '/vendor/autoload.php');
 
 // Create an instance of the API class
 $api_instance = new OpenAPITools\Client\Api\RankApi();
-$location = ; // Location | 
+$latitude = 8.14; // BigDecimal | Latitude of the user's location
+$longitude = 8.14; // BigDecimal | Longitude of the user's location
 
 try {
-    $result = $api_instance->getChoices($location);
+    $result = $api_instance->getChoices($latitude, $longitude);
     print_r($result);
 } catch (Exception $e) {
     echo 'Exception when calling RankApi->getChoices: ', $e->getMessage(), PHP_EOL;
@@ -1683,10 +1689,11 @@ use WWW::OPenAPIClient::RankApi;
 
 # Create an instance of the API class
 my $api_instance = WWW::OPenAPIClient::RankApi->new();
-my $location = WWW::OPenAPIClient::Object::Location->new(); # Location | 
+my $latitude = 8.14; # BigDecimal | Latitude of the user's location
+my $longitude = 8.14; # BigDecimal | Longitude of the user's location
 
 eval {
-    my $result = $api_instance->getChoices(location => $location);
+    my $result = $api_instance->getChoices(latitude => $latitude, longitude => $longitude);
     print Dumper($result);
 };
 if ($@) {
@@ -1703,11 +1710,12 @@ from pprint import pprint
 
 # Create an instance of the API class
 api_instance = openapi_client.RankApi()
-location =  # Location |  (optional)
+latitude = 8.14 # BigDecimal | Latitude of the user's location (optional) (default to null)
+longitude = 8.14 # BigDecimal | Longitude of the user's location (optional) (default to null)
 
 try:
     # Fetch Choices
-    api_response = api_instance.get_choices(location=location)
+    api_response = api_instance.get_choices(latitude=latitude, longitude=longitude)
     pprint(api_response)
 except ApiException as e:
     print("Exception when calling RankApi->getChoices: %s\n" % e)</code></pre>
@@ -1717,10 +1725,11 @@ except ApiException as e:
                               <pre class="prettyprint"><code class="language-rust">extern crate RankApi;
 
 pub fn main() {
-    let location = ; // Location
+    let latitude = 8.14; // BigDecimal
+    let longitude = 8.14; // BigDecimal
 
     let mut context = RankApi::Context::default();
-    let result = client.getChoices(location, &context).wait();
+    let result = client.getChoices(latitude, longitude, &context).wait();
 
     println!("{:?}", result);
 }
@@ -1737,55 +1746,55 @@ pub fn main() {
 
 
 
-                            <div class="methodsubtabletitle">Body parameters</div>
+
+
+                            <div class="methodsubtabletitle">Query parameters</div>
                             <table id="methodsubtable">
                               <tr>
                                 <th width="150px">Name</th>
                                 <th>Description</th>
                               </tr>
-                                <tr><td style="width:150px;">location </td>
+                                <tr><td style="width:150px;">latitude</td>
 <td>
-<p class="marked"></p>
-<script>
-$(document).ready(function() {
-  var schemaWrapper = {
-  "content" : {
-    "application/json" : {
-      "schema" : {
-        "$ref" : "#/components/schemas/location"
-      }
-    }
-  }
-};
 
-  var schema = findNode('schema',schemaWrapper).schema;
-  if (!schema) {
-    schema = schemaWrapper.schema;
-  }
-  if (schema.$ref != null) {
-    schema = defsParser.$refs.get(schema.$ref);
-  } else if (schema.items != null && schema.items.$ref != null) {
-    schema.items = defsParser.$refs.get(schema.items.$ref);
-  } else {
-    schemaWrapper.definitions = Object.assign({}, defs);
-    $RefParser.dereference(schemaWrapper).catch(function(err) {
-      console.log(err);
-    });
-  }
 
-  var view = new JSONSchemaView(schema,2,{isBodyParam: true});
-  var result = $('#d2e199_getChoices_location');
-  result.empty();
-  result.append(view.render());
-});
-</script>
-<div id="d2e199_getChoices_location"></div>
+    <div id="d2e199_getChoices_latitude">
+        <div class="json-schema-view">
+            <div class="primitive">
+                <span class="type">
+                    BigDecimal
+                </span>
+
+                    <div class="inner description marked">
+Latitude of the user&#39;s location
+                    </div>
+            </div>
+        </div>
+    </div>
+</td>
+</tr>
+
+                                <tr><td style="width:150px;">longitude</td>
+<td>
+
+
+    <div id="d2e199_getChoices_longitude">
+        <div class="json-schema-view">
+            <div class="primitive">
+                <span class="type">
+                    BigDecimal
+                </span>
+
+                    <div class="inner description marked">
+Longitude of the user&#39;s location
+                    </div>
+            </div>
+        </div>
+    </div>
 </td>
 </tr>
 
                             </table>
-
-
 
                           <h2>Responses</h2>
                             <h3 id="examples-Rank-getChoices-title-200"></h3>
