@@ -17,7 +17,12 @@ from datetime import datetime, timezone
 from bson import ObjectId
 
 app = Flask(__name__); 
-CORS(app); 
+
+CORS(app, resources={
+    r"/*": {
+        "origins": ["https://c2tp.onrender.com"]
+    }
+})
 
 load_dotenv(); 
 
