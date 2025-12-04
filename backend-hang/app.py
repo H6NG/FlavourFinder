@@ -115,7 +115,7 @@ def registerUser():
     glutenFree = data.get("glutenFree", False)
     vegetarian = data.get("vegetarian", False)
     vegan = data.get("vegan", False)
-    favoriteCuisine = data.get("favouriteCuisine", [])
+    favoriteCuisine = data.get("favoriteCuisine", [])
     
 
     if not all([email, username, password, first, last]):
@@ -160,7 +160,46 @@ def registerUser():
 
 @app.route('/api/updatePreferences', methods = ['PUT'])
 def updatePreferences():
-    pass
+    user_id = get_jwt_identity()
+
+    try:
+        user = users_collection.find_one({"_id": ObjectId(user_id)})
+        if not user:
+            return jsonify({"error": "User not found"}), 404
+    except Exception:
+        return jsonify({"error": "Invalid user ID"}), 400
+
+    data = request.get_json(silent=True) or {}
+
+    update_data = {}
+
+    for field in ["glutenFree", "vegetarian", "vegan"]:
+        if field in data:
+            update_data[f"preferences.{field}"] = bool(data[field])
+
+    if "favoriteCuisine" in data:
+        if isinstance(data["favoriteCuisine"], list):
+            update_data["favoriteCuisine"] = data["favoriteCuisine"]
+        else:
+            return jsonify({"error": "favoriteCuisine must be a list"}), 400
+
+    if not update_data:
+        return jsonify({"error": "No valid fields provided"}), 400
+
+    users_collection.update_one(
+        {"_id": ObjectId(user_id)},
+        {"$set": update_data}
+    )
+
+    updated_user = users_collection.find_one({"_id": ObjectId(user_id)})
+    updated_user["_id"] = str(updated_user["_id"])
+
+    return jsonify({
+        "message": "Preferences updated successfully",
+        "preferences": updated_user["preferences"],
+        "favoriteCuisine": updated_user.get("favoriteCuisine", [])
+    }), 200
+
 @app.route('/api/updateUserInfo', methods = ['POST'])
 def updateUserInfo():
     pass
