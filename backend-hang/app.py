@@ -399,6 +399,7 @@ def addHistory():
     restaurantId = data.get("restaurantId")
     restaurantName = data.get("restaurantName")
     location = data.get("location", {})
+    rating = data.get("rating")
     notes = data.get("notes", "")
 
     if not restaurantId or not restaurantName:
@@ -409,6 +410,7 @@ def addHistory():
         "restaurantId": restaurantId,
         "restaurantName": restaurantName,
         "location": location,
+        "rating": rating, 
         "notes": notes,
         "visitedAt": datetime.now(timezone.utc)
     }
@@ -416,6 +418,39 @@ def addHistory():
     restHistory_collection.insert_one(doc)
 
     return jsonify({"message": "History added"}), 201
+
+
+@app.route('/api/updateHistory', methods=['PUT'])
+@jwt_required()
+def updateHistory():
+    user_id = get_jwt_identity()
+    data = request.get_json(silent=True) or {}
+
+    historyId = data.get("historyId")
+    rating = data.get("rating")
+    notes = data.get("notes", "")
+
+    if not historyId:
+        return jsonify({"error": "historyId required"}), 400
+
+    try:
+        oid = ObjectId(historyId)
+    except:
+        return jsonify({"error": "Invalid historyId"}), 400
+
+    update_doc = {}
+    if rating is not None:
+        update_doc["rating"] = rating
+    if notes is not None:
+        update_doc["notes"] = notes
+
+    restHistory_collection.update_one(
+        {"_id": oid, "userId": ObjectId(user_id)},
+        {"$set": update_doc}
+    )
+
+    return jsonify({"message": "History updated"}), 200
+
 
 @app.route('/api/getHistory', methods=['GET'])
 @jwt_required()
