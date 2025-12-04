@@ -1,23 +1,26 @@
 import NavBar from "./component/navbar";
 import React, { useEffect, useRef, useState } from "react";
+
 import Map from "ol/Map";
 import View from "ol/View";
 import TileLayer from "ol/layer/Tile";
 import OSM from "ol/source/OSM";
+
 import { fromLonLat } from "ol/proj";
 import "ol/ol.css";
 import "./App.css";
 
-import { detectDeviceType } from "./detectDevice";
-import { getUserLocation } from "./getUserLocation";
+import SettingsPage from "./Settings.jsx";
+import useFind from "./Find.jsx";
 
 export default function App() {
   const mapRef = useRef();
+  const mapInstanceRef = useRef(null);
   const viewRef = useRef(null);
 
-  const [choiceData, setChoiceData] = useState(null);
+  const [currentPage, setCurrentPage] = useState("map");
 
-  // Initialize map
+  // mount map
   useEffect(() => {
     if (!mapRef.current) return;
 
@@ -25,86 +28,51 @@ export default function App() {
       center: fromLonLat([0, 0]),
       zoom: 2,
     });
+
     viewRef.current = view;
 
     const map = new Map({
       target: mapRef.current,
       layers: [new TileLayer({ source: new OSM() })],
-      view: view
+      view,
     });
+
+    mapInstanceRef.current = map;
 
     return () => map.setTarget(undefined);
   }, []);
 
-  // 🔥 This runs when the user presses FIND
-  const handleFind = async () => {
-    const device = detectDeviceType();
-    console.log("DEVICE:", device);
-
-    try {
-      const { lat, lon } = await getUserLocation();
-      console.log("LOCATION:", lat, lon);
-
-      // zoom map to user
-      viewRef.current.animate({
-        center: fromLonLat([lon, lat]),
-        zoom: 13,
-        duration: 1500,
-      });
-
-      // 1️⃣ Call your random restaurant endpoint
-      const res = await fetch("http://javabackend.bungalou.ca/api/v1/rank/choice", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ latitude: lat, longitude: lon }),
-      });
-
-      const data = await res.json();
-
-      // 2️⃣ Store Restaurant A/B/C
-      setChoiceData(data);
-
-    } catch (err) {
-      alert("Unable to get location. Please enable GPS");
+  // FIX map resize when switching page
+  useEffect(() => {
+    if (currentPage === "map") {
+      setTimeout(() => {
+        mapInstanceRef.current?.updateSize();
+      }, 150);
     }
-  };
+  }, [currentPage]);
 
-  // 🔥 This is when user chooses a restaurant
-  const chooseRestaurant = (choice) => {
-    console.log("User selected:", choice);
-
-    // You will later:
-    // POST /api/makeChoice
-    // store history
-    // navigate to next screen
-  };
+  // Import Find logic
+  const runFind = useFind(mapInstanceRef, viewRef);
 
   return (
     <>
-      <NavBar onFind={handleFind} />
+      <NavBar
+        onFind={() => {
+          setCurrentPage("map");
+          runFind();
+        }}
+        onSettings={() => setCurrentPage("settings")}
+      />
 
-      <div className="map-content">
-        <div
-          ref={mapRef}
-          style={{ width: "100%", height: "100%" }}
-        />
-      </div>
+      {currentPage === "settings" && (
+        <div className="content-container">
+          <SettingsPage />
+        </div>
+      )}
 
-      {choiceData && (
-        <div className="choice-container">
-          <h3>Choose your restaurant</h3>
-
-          <button onClick={() => chooseRestaurant("A")}>
-            {choiceData.restaurantA.name}
-          </button>
-
-          <button onClick={() => chooseRestaurant("B")}>
-            {choiceData.restaurantB.name}
-          </button>
-
-          <button onClick={() => chooseRestaurant("C")}>
-            {choiceData.restaurantC.name}
-          </button>
+      {currentPage === "map" && (
+        <div className="map-content">
+          <div ref={mapRef} style={{ width: "100%", height: "100%" }} />
         </div>
       )}
     </>

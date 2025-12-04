@@ -1,5 +1,5 @@
 @import "tailwindcss";
-
+/*
 
 .map-content {
   margin-left: 240px; 
@@ -12,7 +12,7 @@
   padding: 0;
 }
 
-/* Mobile Responsiveness */
+
 @media (max-width: 500px) {
   .map-content {
     margin-left: 0;
@@ -21,4 +21,18 @@
     
     height: 100vh;
   }
+}
+*/
+.map-content {
+  position: absolute;
+  top: 0;
+  left: 200px; /* width of your sidebar */
+  right: 0;
+  bottom: 0;
+  height: 100vh;
+}
+
+.content-container {
+  margin-left: 200px;
+  padding: 20px;
 }
