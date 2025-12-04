@@ -35,8 +35,8 @@ mongo_collection = os.getenv("MONGO_COLLECTION")
 
 try: 
     client = MongoClient(mongo_uri)
-    db = client[mongo_db]
-    users_collection = db[mongo_collection]
+    db = client["auth"]
+    users_collection = db["user"]
     print("Connected to MangoDB")
 
 except Exception as e: 
