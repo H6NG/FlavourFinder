@@ -64,7 +64,7 @@ export default function SignUpPage() {
           <input ref={lastName} type="text" placeholder="Last Name" className="border border-black rounded-lg px-4 py-3" />
           <input ref={password} type="password" placeholder="Password" className="border border-black rounded-lg px-4 py-3" />
 
-          <button type="submit" className="border border-black rounded-lg py-3 font-semibold hover:bg-black hover:text-white">
+          <button type="submit" className="border border-black rounded-lg py-3 font-semibold hover:bg-black hover:text-white cursor-pointer">
             Sign Up
           </button>
 
