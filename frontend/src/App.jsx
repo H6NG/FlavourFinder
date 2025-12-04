@@ -1,104 +1,112 @@
-
 import NavBar from "./component/navbar";
-import React, { useEffect, useRef } from 'react';
-import Map from 'ol/Map';
-import View from 'ol/View';
-import TileLayer from 'ol/layer/Tile';
-import OSM from 'ol/source/OSM';
-import 'ol/ol.css'; 
-import './App.css';
+import React, { useEffect, useRef, useState } from "react";
+import Map from "ol/Map";
+import View from "ol/View";
+import TileLayer from "ol/layer/Tile";
+import OSM from "ol/source/OSM";
+import { fromLonLat } from "ol/proj";
+import "ol/ol.css";
+import "./App.css";
 
-import { fromLonLat } from 'ol/proj';
+import { detectDeviceType } from "./detectDevice";
+import { getUserLocation } from "./getUserLocation";
 
 export default function App() {
+  const mapRef = useRef();
+  const viewRef = useRef(null);
 
-  
-  const mapElement = useRef();
+  const [choiceData, setChoiceData] = useState(null);
 
-
+  // Initialize map
   useEffect(() => {
+    if (!mapRef.current) return;
 
-    if (!mapElement.current) return;
-
-    
-    // We create the view outside of the map setup so we can update it later.
-    const initialView = new View({
-      center: fromLonLat([0, 0]), // Default center (in case geolocation fails)
-      zoom: 2, 
+    const view = new View({
+      center: fromLonLat([0, 0]),
+      zoom: 2,
     });
+    viewRef.current = view;
 
-    // 1. Create the Map instance
     const map = new Map({
-      // 2. Target the specific <div> using its ID
-      target: mapElement.current, 
-      
-      // 3. Define the layers to show (e.g., OpenStreetMap)
-      layers: [
-        new TileLayer({
-          source: new OSM(),
-        }),
-      ],
-      
-      // 4. Set the initial view (center and zoom)
-      view: initialView,
+      target: mapRef.current,
+      layers: [new TileLayer({ source: new OSM() })],
+      view: view
     });
 
+    return () => map.setTarget(undefined);
+  }, []);
 
-    // --- 3. Get User Location (Geolocation API) ---
-    if (navigator.geolocation) {
-      navigator.geolocation.getCurrentPosition(
-        (position) => {
-          // Success callback
-          const lon = position.coords.longitude;
-          const lat = position.coords.latitude;
-          
-          // Convert standard Lat/Lon to the projection OpenLayers uses (Web Mercator)
-          const newCenter = fromLonLat([lon, lat]);
+  // 🔥 This runs when the user presses FIND
+  const handleFind = async () => {
+    const device = detectDeviceType();
+    console.log("DEVICE:", device);
 
-          // Update the map's view to the new location
-          initialView.animate({
-            center: newCenter,
-            duration: 2000, // Smooth transition time in milliseconds
-            zoom: 12,      // Zoom in closer to the local area
-          });
-        },
-        (error) => {
-          // Error callback (e.g., user denied permission)
-          console.warn('Geolocation failed:', error);
-          // The map will remain at the default center [0, 0]
-        }
-      );
-    } else {
-      console.warn("Geolocation is not supported by this browser.");
+    try {
+      const { lat, lon } = await getUserLocation();
+      console.log("LOCATION:", lat, lon);
+
+      // zoom map to user
+      viewRef.current.animate({
+        center: fromLonLat([lon, lat]),
+        zoom: 13,
+        duration: 1500,
+      });
+
+      // 1️⃣ Call your random restaurant endpoint
+      const res = await fetch("http://javabackend.bungalou.ca/api/v1/rank/choice", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ latitude: lat, longitude: lon }),
+      });
+
+      const data = await res.json();
+
+      // 2️⃣ Store Restaurant A/B/C
+      setChoiceData(data);
+
+    } catch (err) {
+      alert("Unable to get location. Please enable GPS");
     }
+  };
 
-    // 5. Cleanup Function: This runs when the component is removed from the DOM
-    // It is essential for preventing memory leaks when using third-party libraries.
-    return () => {
-      map.setTarget(undefined);
-    };
+  // 🔥 This is when user chooses a restaurant
+  const chooseRestaurant = (choice) => {
+    console.log("User selected:", choice);
 
-  // The empty dependency array [] ensures this effect runs ONLY once on mount
-  }, []); 
+    // You will later:
+    // POST /api/makeChoice
+    // store history
+    // navigate to next screen
+  };
 
-  // --- JSX Rendering ---
   return (
     <>
+      <NavBar onFind={handleFind} />
 
-    <NavBar/>
+      <div className="map-content">
+        <div
+          ref={mapRef}
+          style={{ width: "100%", height: "100%" }}
+        />
+      </div>
 
-    <div className="map-content">
-      <div
-        ref={mapElement} // Attach the ref here
-            style={{
-              width: "100%",  // Fill width of parent
-              height: "100%", // Fill height of parent
-            }} 
-          />
+      {choiceData && (
+        <div className="choice-container">
+          <h3>Choose your restaurant</h3>
 
+          <button onClick={() => chooseRestaurant("A")}>
+            {choiceData.restaurantA.name}
+          </button>
 
-    </div>
-    
+          <button onClick={() => chooseRestaurant("B")}>
+            {choiceData.restaurantB.name}
+          </button>
+
+          <button onClick={() => chooseRestaurant("C")}>
+            {choiceData.restaurantC.name}
+          </button>
+        </div>
+      )}
     </>
   );
 }

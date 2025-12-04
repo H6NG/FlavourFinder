@@ -44,6 +44,7 @@
 .nav-links li a:hover {
   background: #f4f4f4;
   transform: translateX(6px);
+  cursor: pointer;
 }
 
 .nav-links li a svg {
