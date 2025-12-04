@@ -125,7 +125,6 @@ export default function FeedPage() {
         Community Feed
       </h1>
 
-      {/* NEW Share Post Button */}
       <button style={shareButton} onClick={() => setShowShare(true)}>
         + Share a Post
       </button>
@@ -136,7 +135,7 @@ export default function FeedPage() {
 
       {posts.map((post) => (
         <div key={post._id} style={cardStyle}>
-          {/* Header: Username + Follow */}
+            
           <div
             style={{
               display: "flex",
@@ -148,26 +147,26 @@ export default function FeedPage() {
             <button style={followButton}>Follow</button>
           </div>
 
-          {/* Restaurant */}
+
           <div style={{ fontSize: 17, fontWeight: 500, marginBottom: 10 }}>
             📍 {post.restaurant}
           </div>
 
-          {/* Rating */}
+
           {post.rating !== undefined && (
             <div style={{ fontSize: 15, color: "#444", marginBottom: 8 }}>
               ⭐ <strong>{post.rating} / 5</strong>
             </div>
           )}
 
-          {/* User Comment */}
+
           {post.comments && (
             <div style={{ fontSize: 15, marginTop: 10, color: "#444" }}>
               💬 {post.comments}
             </div>
           )}
 
-          {/* Timestamp */}
+
           <div style={{ fontSize: 13, color: "#777", marginTop: 12 }}>
             Posted:{" "}
             {post.postedAt
@@ -175,7 +174,6 @@ export default function FeedPage() {
               : "Unknown"}
           </div>
 
-          {/* Replies */}
           {post.commentBack?.length > 0 && (
             <div
               style={{

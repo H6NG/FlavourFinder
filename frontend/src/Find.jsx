@@ -1,10 +1,11 @@
-// Find.jsx — Map + Floating Restaurant Picker + API Fix
+
 import React, { useEffect, useRef, useState } from "react";
 import L from "leaflet";
 import "leaflet/dist/leaflet.css";
 
 import { getUserLocation } from "./utility/getUserLocation.js";
 import { getCookie } from "./utility/cookies.js";
+import "leaflet/dist/leaflet.css";
 
 const UBC_LAT = 49.2606;
 const UBC_LON = -123.2460;
@@ -37,28 +38,23 @@ export default function FindPage({ trigger }) {
         console.warn("GPS failed, using UBC fallback");
       }
 
-      // 2) INIT MAP IF NOT CREATED
       if (!mapInstance.current) {
         mapInstance.current = L.map(mapRef.current, { zoomControl: false });
       }
 
-      // CENTER MAP
       mapInstance.current.setView([lat, lon], 15);
 
-      // REMOVE ALL EXISTING TILE LAYERS BEFORE ADDING NEW ONE
       mapInstance.current.eachLayer((layer) => {
         if (!(layer instanceof L.Marker)) mapInstance.current.removeLayer(layer);
       });
 
-      // ADD TILE LAYER
       L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png", {
         maxZoom: 19,
       }).addTo(mapInstance.current);
 
-      // USER LOCATION MARKER
       L.marker([lat, lon]).addTo(mapInstance.current).bindPopup("You are here");
 
-      // 3) CALL BACKEND API FOR RECOMMENDATIONS
+      
       const apiUrl =
         `https://javabackend.bungalou.ca/api/v1/rank/choice?latitude=${lat}&longitude=${lon}`;
 
@@ -70,8 +66,7 @@ export default function FindPage({ trigger }) {
 
         console.log("API RESULT:", data);
 
-        // ----- IMPORTANT -----
-        // Parse EXACT backend format
+        
         const list = [
           data.restaurauntA,
           data.restaurauntB,
@@ -84,7 +79,7 @@ export default function FindPage({ trigger }) {
         setSelectedIndex(null);
         setMessage("");
 
-        // ADD MARKERS FOR RESTAURANTS
+        
         list.forEach((r) => {
           const { latitude, longitude } = r.location;
 
@@ -157,7 +152,6 @@ export default function FindPage({ trigger }) {
         }}
       />
 
-      {/* FLOATING BOX ON TOP OF MAP */}
       {restaurants.length > 0 && (
         <div
           style={{
@@ -171,7 +165,7 @@ export default function FindPage({ trigger }) {
             padding: "18px",
             borderRadius: "14px",
             boxShadow: "0 4px 18px rgba(0,0,0,0.2)",
-            zIndex: 2000,     // <<< MAKE BOX ABOVE MAP
+            zIndex: 2000, 
           }}
         >
 
