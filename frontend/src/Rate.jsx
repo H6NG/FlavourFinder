@@ -12,48 +12,32 @@ export default function RatePage() {
   const [saving, setSaving] = useState(false);
   const [error, setError] = useState("");
 
-  // ---------------------------------------------------------
-  // Fetch 3 most recent history entries
-  // ---------------------------------------------------------
   useEffect(() => {
     const fetchHistory = async () => {
       try {
         const res = await fetch(`${BACKEND}/api/getHistory`, {
           method: "GET",
-          headers: {
-            Authorization: `Bearer ${accessToken}`,
-          },
+          headers: { Authorization: `Bearer ${accessToken}` }
         });
 
         const data = await res.json();
-
-        if (!res.ok) {
-          console.error("Backend error:", data);
-          throw new Error("Failed to load history");
-        }
-
         const history = data.history || [];
+
         const top3 = history.slice(0, 3);
 
-        // SAFELY NORMALIZE fields to avoid React errors
-        const withTempFields = top3.map((h) => ({
+        const normalized = top3.map((h) => ({
           ...h,
-
-          // rating must be a number or ""
           rating: typeof h.rating === "number" ? h.rating : "",
-
-          // notes must be a string, never an object
           comment:
             typeof h.notes === "string"
               ? h.notes
               : h.notes && typeof h.notes === "object"
               ? JSON.stringify(h.notes)
-              : "",
+              : ""
         }));
 
-        setItems(withTempFields);
+        setItems(normalized);
       } catch (err) {
-        console.error("Fetch history error:", err);
         setError("Unable to load history.");
       } finally {
         setLoading(false);
@@ -63,9 +47,6 @@ export default function RatePage() {
     fetchHistory();
   }, []);
 
-  // ---------------------------------------------------------
-  // Submit rating to backend
-  // ---------------------------------------------------------
   const submitRating = async (item, index) => {
     if (!item.rating || item.rating < 1 || item.rating > 5) {
       alert("Please choose a rating from 1 to 5.");
@@ -79,89 +60,73 @@ export default function RatePage() {
         method: "PUT",
         headers: {
           Authorization: `Bearer ${accessToken}`,
-          "Content-Type": "application/json",
+          "Content-Type": "application/json"
         },
         body: JSON.stringify({
           historyId: item._id,
           rating: item.rating,
-          notes: item.comment,
-        }),
+          notes: item.comment
+        })
       });
 
-      const data = await res.json();
-
       if (!res.ok) {
-        console.error("Rating error:", data);
-        alert("Error saving rating: " + (data.error || "unknown error"));
+        alert("Error saving rating.");
         return;
       }
 
       alert("Rating saved!");
 
-      // Remove rated item from UI (optional)
       const clone = [...items];
       clone.splice(index, 1);
       setItems(clone);
-    } catch (err) {
-      console.error("Rating submit error:", err);
+
+    } catch {
       alert("Failed to submit rating.");
     }
 
     setSaving(false);
   };
 
-  // ---------------------------------------------------------
-  // Render UI
-  // ---------------------------------------------------------
-  if (loading) {
+  // ----------------------------------------
+  // Loading / Error / Empty states
+  // ----------------------------------------
+  if (loading)
     return (
-      <div className="content-container" style={{ padding: "20px" }}>
+      <div style={{ padding: "24px", marginLeft: "32px" }}>
         <h2>Rate Your Recent Restaurants</h2>
         <p>Loading history…</p>
       </div>
     );
-  }
 
-  if (error) {
+  if (error)
     return (
-      <div className="content-container" style={{ padding: "20px" }}>
+      <div style={{ padding: "24px", marginLeft: "32px" }}>
         <h2>Rate Your Recent Restaurants</h2>
         <p style={{ color: "red" }}>{error}</p>
       </div>
     );
-  }
 
-  if (!items.length) {
+  if (!items.length)
     return (
-      <div
-        className="content-container"
-        style={{
-          padding: "40px 20px",
-          maxWidth: "650px",
-          marginLeft: "20px",
-          marginRight: "auto",
-        }}
-      >
+      <div style={{ padding: "40px 24px", marginLeft: "32px" }}>
         <h2>Rate Your Recent Restaurants</h2>
-        <p style={{ marginTop: "10px" }}>
-          No restaurants to rate right now.
-        </p>
+        <p style={{ marginTop: "10px" }}>No restaurants to rate right now.</p>
       </div>
     );
-  }
 
+  // ----------------------------------------
+  // MAIN UI
+  // ----------------------------------------
   return (
     <div
-      className="content-container"
       style={{
-        padding: "20px",
-        maxWidth: "650px",
-        marginLeft: "20px",
-        marginRight: "auto",
+        padding: "24px",
+        maxWidth: "700px",
+        marginLeft: "32px"
       }}
     >
-      <h2>Rate Your Recent Restaurants</h2>
-      <p style={{ marginBottom: "15px" }}>
+      <h2 style={{ marginBottom: "6px" }}>Rate Your Recent Restaurants</h2>
+      <p style={{ marginBottom: "20px", color: "#444" }}>
         You can rate the last 3 places you visited.
       </p>
 
@@ -170,34 +135,46 @@ export default function RatePage() {
           key={item._id}
           style={{
             border: "1px solid #ddd",
-            borderRadius: "10px",
-            padding: "15px",
-            marginBottom: "15px",
-            background: "#fafafa",
-            boxShadow: "0 1px 3px rgba(0,0,0,0.08)",
+            borderRadius: "14px",
+            padding: "18px 22px",
+            marginBottom: "20px",
+            background: "white",
+            boxShadow: "0 2px 8px rgba(0,0,0,0.06)",
+            transition: "0.2s",
+          }}
+          onMouseEnter={(e) => {
+            e.currentTarget.style.boxShadow = "0 3px 12px rgba(0,0,0,0.10)";
+          }}
+          onMouseLeave={(e) => {
+            e.currentTarget.style.boxShadow = "0 2px 8px rgba(0,0,0,0.06)";
           }}
         >
-          <h3 style={{ margin: "0 0 5px" }}>
-            {item.restaurantName || "Unnamed Restaurant"}
+          <h3 style={{ margin: "0 0 6px", fontSize: "1.25rem" }}>
+            {item.restaurantName}
           </h3>
 
-          <div style={{ fontSize: "0.9rem", color: "#555", marginBottom: 8 }}>
+          <div style={{ fontSize: "0.9rem", color: "#666", marginBottom: "12px" }}>
             Visited at:{" "}
             {item.visitedAt
               ? new Date(item.visitedAt).toLocaleString()
-              : "Unknown date"}
+              : "Unknown"}
           </div>
 
-          {/* Rating Dropdown */}
-          <label style={{ display: "block", marginTop: "8px" }}>
-            Rating (1–5):
+          {/* Rating Section */}
+          <div style={{ marginBottom: "12px" }}>
+            <span style={{ fontWeight: 500 }}>Rating (1–5):</span>{" "}
             <select
               value={item.rating}
-              style={{ marginLeft: "10px" }}
               onChange={(e) => {
                 const clone = [...items];
                 clone[index].rating = Number(e.target.value);
                 setItems(clone);
+              }}
+              style={{
+                marginLeft: "10px",
+                padding: "6px 10px",
+                borderRadius: "6px",
+                border: "1px solid #ccc",
               }}
             >
               <option value="">Choose</option>
@@ -207,39 +184,43 @@ export default function RatePage() {
                 </option>
               ))}
             </select>
-          </label>
+          </div>
 
           {/* Comment Box */}
           <textarea
             placeholder="Write a comment…"
-            style={{
-              width: "100%",
-              marginTop: "10px",
-              padding: "8px",
-              resize: "vertical",
-              minHeight: "60px",
-            }}
             value={item.comment}
             onChange={(e) => {
               const clone = [...items];
               clone[index].comment = e.target.value;
               setItems(clone);
             }}
+            style={{
+              width: "100%",
+              padding: "10px",
+              borderRadius: "8px",
+              border: "1px solid #ccc",
+              resize: "vertical",
+              minHeight: "70px",
+            }}
           />
 
-          {/* Submit Button */}
           <button
             disabled={saving}
             onClick={() => submitRating(item, index)}
             style={{
-              marginTop: "10px",
-              background: "#2196F3",
+              marginTop: "14px",
+              background: "#1a73e8",
               color: "white",
-              padding: "8px 16px",
-              borderRadius: "5px",
+              padding: "10px 18px",
+              borderRadius: "6px",
               border: "none",
               cursor: "pointer",
+              fontSize: "0.95rem",
+              transition: "0.2s",
             }}
+            onMouseEnter={(e) => (e.currentTarget.style.background = "#1669cc")}
+            onMouseLeave={(e) => (e.currentTarget.style.background = "#1a73e8")}
           >
             {saving ? "Saving…" : "Submit Rating"}
           </button>
