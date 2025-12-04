@@ -47,6 +47,7 @@ try:
     db = client["auth"]
     users_collection = db["user"]
     restHistory_collection = db["restaurantwentByUser"]
+    postSharing_collection = db["postSharing"]
     print("Connected to MangoDB")
 
 except Exception as e: 
@@ -69,6 +70,50 @@ except Exception as e:
     print("FOR DEBUG ONLY: Failed to connect to PostgreSQL database:", e)
 
 # Routes
+
+@app.route('/api/sharePost', methods=['POST'])
+def sharePost():
+    data = request.get_json(silent=True) or {}
+
+    username = data.get("username")
+    restaurant = data.get("restaurant")
+    rating = data.get("rating")
+    comments = data.get("comments")
+    commentBack = data.get("commentBack", [])
+
+    if not username or not restaurant:
+        return jsonify({"error": "username and restaurant are required"}), 400
+
+    doc = {
+        "username": username,
+        "restaurant": restaurant,
+        "rating": rating,
+        "comments": comments,
+        "commentBack": commentBack,
+        "postedAt": datetime.now(timezone.utc)
+    }
+
+    postSharing_collection.insert_one(doc)
+
+    return jsonify({"message": "Post shared successfully"}), 201
+
+@app.route('/api/getSharedPosts', methods=['GET'])
+def getSharedPosts():
+    try:
+        posts = list(
+            postSharing_collection.find().sort("postedAt", -1)
+        )
+
+        # Convert ObjectId to string
+        for p in posts:
+            p["_id"] = str(p["_id"])
+
+        return jsonify({"posts": posts}), 200
+
+    except Exception as e:
+        print("Error fetching shared posts:", e)
+        return jsonify({"error": "Failed to load shared posts"}), 500
+
 
 @app.route('/')
 def home():

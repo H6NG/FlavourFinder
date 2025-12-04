@@ -9,16 +9,22 @@ export default function HistoryPage() {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
 
+  const cardStyle = {
+    background: "white",
+    borderRadius: 12,
+    padding: "25px 30px",
+    border: "1px solid #e5e7eb",
+    marginBottom: 25,
+    boxShadow: "0 2px 6px rgba(0,0,0,0.05)",
+    fontFamily: "Inter, Arial, sans-serif",
+  };
+
   useEffect(() => {
     const fetchHistory = async () => {
       try {
-        setLoading(true);
-        setError("");
-
         const accessToken = getCookie("accessToken");
         if (!accessToken) {
-          setError("You are not logged in (no access token found).");
-          setLoading(false);
+          setError("You are not logged in.");
           return;
         }
 
@@ -30,16 +36,12 @@ export default function HistoryPage() {
           },
         });
 
-        if (!res.ok) {
-          const text = await res.text();
-          throw new Error(`Request failed (${res.status}): ${text}`);
-        }
+        if (!res.ok) throw new Error(await res.text());
 
         const data = await res.json();
-        // adjust this depending on your backend shape
-        // e.g. { history: [...] } vs just [...]
         const list = Array.isArray(data) ? data : data.history || [];
         setHistory(list);
+
       } catch (err) {
         console.error("getHistory error:", err);
         setError("Unable to load history.");
@@ -51,84 +53,100 @@ export default function HistoryPage() {
     fetchHistory();
   }, []);
 
-  if (loading) {
+  // -------------------------------------
+  // LOADING / ERROR / EMPTY STATES
+  // -------------------------------------
+  if (loading)
     return (
-      <div className="content-container">
-        <p>Loading history…</p>
+      <div style={{ padding: 30, maxWidth: 650, margin: "0 auto" }}>
+        Loading history…
       </div>
     );
-  }
 
-  if (error) {
+  if (error)
     return (
-      <div className="content-container">
-        <p style={{ color: "red" }}>{error}</p>
+      <div
+        style={{
+          color: "red",
+          padding: 30,
+          maxWidth: 650,
+          margin: "0 auto",
+          fontFamily: "Inter, Arial, sans-serif",
+        }}
+      >
+        {error}
       </div>
     );
-  }
 
-  if (!history.length) {
+  if (!history.length)
     return (
-      <div className="content-container">
-        <p>No history yet.</p>
+      <div
+        style={{
+          padding: 30,
+          maxWidth: 650,
+          margin: "0 auto",
+          fontFamily: "Inter, Arial, sans-serif",
+        }}
+      >
+        <h1 style={{ fontSize: 32, fontWeight: 600, marginBottom: 20 }}>
+          History
+        </h1>
+        <div style={cardStyle}>No history yet.</div>
       </div>
     );
-  }
 
+  // -------------------------------------
+  // MAIN UI
+  // -------------------------------------
   return (
-    <div className="content-container">
-      <h2>Your restaurant history</h2>
-      <ul style={{ listStyle: "none", padding: 0 }}>
-        {history.map((item, idx) => {
-          // Try to guess common fields; fall back to JSON dump
-          const name =
-            item.restaurantName ||
-            item.name ||
-            item.restaurant ||
-            `Visit #${idx + 1}`;
-          const time =
-            item.visitedAt ||
-            item.date ||
-            item.timestamp ||
-            "";
+    <div
+      style={{
+        padding: "30px",
+        maxWidth: "650px",
+        margin: "0 auto",
+        fontFamily: "Inter, Arial, sans-serif",
+      }}
+    >
+      <h1 style={{ marginBottom: 25, fontSize: 32, fontWeight: 600 }}>
+        History
+      </h1>
 
-          const extra =
-            item.address ||
-            item.location ||
-            item.notes ||
-            "";
+      {history.map((item, idx) => {
+        const name = item.restaurantName || `Visit #${idx + 1}`;
+        const visited = item.visitedAt
+          ? new Date(item.visitedAt).toLocaleString()
+          : "Unknown date";
 
-          return (
-            <li
-              key={item.id || idx}
-              style={{
-                border: "1px solid #ddd",
-                borderRadius: "8px",
-                padding: "10px",
-                marginBottom: "8px",
-              }}
-            >
-              <strong>{name}</strong>
-              {time && <div style={{ fontSize: "0.9rem" }}>When: {time}</div>}
-              {extra && (
-                <div style={{ fontSize: "0.9rem" }}>Info: {extra}</div>
-              )}
+        const rating = typeof item.rating === "number" ? item.rating : null;
+        const notes =
+          typeof item.notes === "string"
+            ? item.notes
+            : item.notes && typeof item.notes === "object"
+            ? JSON.stringify(item.notes)
+            : "";
 
-              {!time && !extra && (
-                <pre
-                  style={{
-                    marginTop: "6px",
-                    fontSize: "0.8rem",
-                    whiteSpace: "pre-wrap",
-                  }}
-                >
-                  {JSON.stringify(item, null, 2)}
-                </pre>
-              )}
-            </li>
-          );
-        })}
-      </ul>
+        return (
+          <div key={item._id || idx} style={cardStyle}>
+            <h2 style={{ margin: 0, fontSize: 22 }}>{name}</h2>
+
+            <p style={{ marginTop: 8, color: "#555", fontSize: 15 }}>
+              <strong>Visited:</strong> {visited}
+            </p>
+
+            {rating !== null && (
+              <p style={{ marginTop: 8, color: "#444", fontSize: 15 }}>
+                <strong>Rating:</strong> {rating} / 5
+              </p>
+            )}
+
+            {notes && (
+              <p style={{ marginTop: 8, color: "#444", fontSize: 15 }}>
+                <strong>Comment:</strong> {notes}
+              </p>
+            )}
+          </div>
+        );
+      })}
     </div>
   );
 }
