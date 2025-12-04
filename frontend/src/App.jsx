@@ -13,6 +13,7 @@ import "./App.css";
 import NavBar from "./component/navbar";
 import SettingsPage from "./Settings.jsx";
 import HistoryPage from "./getHistory.jsx";
+import RatePage from "./Rate.jsx";
 import useFind from "./Find.jsx";
 
 export default function App() {
@@ -71,6 +72,7 @@ export default function App() {
         onFind={() => setCurrentPage("map")}
         onHistory={() => setCurrentPage("history")}
         onSettings={() => setCurrentPage("settings")}
+        onRate={() => setCurrentPage("rate")} 
       />
 
       {/* HISTORY PAGE */}
@@ -86,6 +88,13 @@ export default function App() {
           <SettingsPage />
         </div>
       )}
+
+      {currentPage === "rate" && (
+        <div className="content-container">
+          <RatePage />
+        </div>
+      )}
+
 
       {/* MAP PAGE */}
       {currentPage === "map" && (

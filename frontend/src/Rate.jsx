@@ -35,17 +35,26 @@ export default function RatePage() {
         const history = data.history || [];
         const top3 = history.slice(0, 3);
 
-        // Initialize rating/comment fields if missing
+        // SAFELY NORMALIZE fields to avoid React errors
         const withTempFields = top3.map((h) => ({
           ...h,
-          rating: h.rating || "",
-          comment: h.notes || "",
+
+          // rating must be a number or ""
+          rating: typeof h.rating === "number" ? h.rating : "",
+
+          // notes must be a string, never an object
+          comment:
+            typeof h.notes === "string"
+              ? h.notes
+              : h.notes && typeof h.notes === "object"
+              ? JSON.stringify(h.notes)
+              : "",
         }));
 
         setItems(withTempFields);
       } catch (err) {
         console.error("Fetch history error:", err);
-        setError("Unable to load history");
+        setError("Unable to load history.");
       } finally {
         setLoading(false);
       }
@@ -82,18 +91,17 @@ export default function RatePage() {
       const data = await res.json();
 
       if (!res.ok) {
-        alert("Error saving rating: " + data.error);
         console.error("Rating error:", data);
+        alert("Error saving rating: " + (data.error || "unknown error"));
         return;
       }
 
       alert("Rating saved!");
 
-      // Remove the rated item from the list (optional but clean)
+      // Remove rated item from UI (optional)
       const clone = [...items];
       clone.splice(index, 1);
       setItems(clone);
-
     } catch (err) {
       console.error("Rating submit error:", err);
       alert("Failed to submit rating.");
@@ -105,14 +113,57 @@ export default function RatePage() {
   // ---------------------------------------------------------
   // Render UI
   // ---------------------------------------------------------
-  if (loading) return <p>Loading history…</p>;
-  if (error) return <p style={{ color: "red" }}>{error}</p>;
-  if (!items.length) return <p>No restaurants to rate right now.</p>;
+  if (loading) {
+    return (
+      <div className="content-container" style={{ padding: "20px" }}>
+        <h2>Rate Your Recent Restaurants</h2>
+        <p>Loading history…</p>
+      </div>
+    );
+  }
+
+  if (error) {
+    return (
+      <div className="content-container" style={{ padding: "20px" }}>
+        <h2>Rate Your Recent Restaurants</h2>
+        <p style={{ color: "red" }}>{error}</p>
+      </div>
+    );
+  }
+
+  if (!items.length) {
+    return (
+      <div
+        className="content-container"
+        style={{
+          padding: "40px 20px",
+          maxWidth: "650px",
+          marginLeft: "20px",
+          marginRight: "auto",
+        }}
+      >
+        <h2>Rate Your Recent Restaurants</h2>
+        <p style={{ marginTop: "10px" }}>
+          No restaurants to rate right now.
+        </p>
+      </div>
+    );
+  }
 
   return (
-    <div className="content-container" style={{ padding: "20px" }}>
+    <div
+      className="content-container"
+      style={{
+        padding: "20px",
+        maxWidth: "650px",
+        marginLeft: "20px",
+        marginRight: "auto",
+      }}
+    >
       <h2>Rate Your Recent Restaurants</h2>
-      <p>You can rate the last 3 places you visited.</p>
+      <p style={{ marginBottom: "15px" }}>
+        You can rate the last 3 places you visited.
+      </p>
 
       {items.map((item, index) => (
         <div
@@ -123,16 +174,22 @@ export default function RatePage() {
             padding: "15px",
             marginBottom: "15px",
             background: "#fafafa",
+            boxShadow: "0 1px 3px rgba(0,0,0,0.08)",
           }}
         >
-          <h3>{item.restaurantName}</h3>
+          <h3 style={{ margin: "0 0 5px" }}>
+            {item.restaurantName || "Unnamed Restaurant"}
+          </h3>
 
-          <div style={{ fontSize: "0.9rem", color: "#555" }}>
-            Visited at: {new Date(item.visitedAt).toLocaleString()}
+          <div style={{ fontSize: "0.9rem", color: "#555", marginBottom: 8 }}>
+            Visited at:{" "}
+            {item.visitedAt
+              ? new Date(item.visitedAt).toLocaleString()
+              : "Unknown date"}
           </div>
 
-          {/* Rating Select */}
-          <label style={{ display: "block", marginTop: "10px" }}>
+          {/* Rating Dropdown */}
+          <label style={{ display: "block", marginTop: "8px" }}>
             Rating (1–5):
             <select
               value={item.rating}
@@ -155,7 +212,13 @@ export default function RatePage() {
           {/* Comment Box */}
           <textarea
             placeholder="Write a comment…"
-            style={{ width: "100%", marginTop: "10px", padding: "8px" }}
+            style={{
+              width: "100%",
+              marginTop: "10px",
+              padding: "8px",
+              resize: "vertical",
+              minHeight: "60px",
+            }}
             value={item.comment}
             onChange={(e) => {
               const clone = [...items];
@@ -164,6 +227,7 @@ export default function RatePage() {
             }}
           />
 
+          {/* Submit Button */}
           <button
             disabled={saving}
             onClick={() => submitRating(item, index)}
@@ -171,7 +235,7 @@ export default function RatePage() {
               marginTop: "10px",
               background: "#2196F3",
               color: "white",
-              padding: "8px 15px",
+              padding: "8px 16px",
               borderRadius: "5px",
               border: "none",
               cursor: "pointer",
