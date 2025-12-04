@@ -1,52 +1,54 @@
-import React from "react";
-import { useEffect, useState, useRef } from "react";
-
+import React, { useRef } from "react";
+import './signUp.css'; 
 
 export default function SignUpPage() {
 
   const email = useRef(null);
   const password = useRef(null); 
-  const token = useRef(null); 
-  const name = useRef(null); 
+  const userName = useRef(null);
+  const firstName = useRef(null);
+  const lastName = useRef(null);
 
-  const handleSubmit = async(e) => {
-
-    // no need to call handleSubmit() func; just change onSubmit={handleSubmit}
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    const emailCurrent = email.current.value;
-    const passwordCurrent = password.current.value;
 
-    console.log("Submitted:", emailCurrent, passwordCurrent);
-    await signFetch(emailCurrent, passwordCurrent, "", "");
-  };
-
-  const signFetch = async(globalEmail, globalPassword, name, token) => {
+    const payload = {
+      email: email.current.value,
+      userName: userName.current.value,
+      password: password.current.value,
+      firstName: firstName.current.value,
+      lastName: lastName.current.value,
+      glutenFree: false,
+      vegetarian: false,
+      vegan: false,
+      favoriteCuisine: []
+    };
 
     try {
+      const response = await fetch(
+        "https://c2tp-backend-python.onrender.com/api/registerUser",
+        {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify(payload),
+        }
+      );
 
-      const response = await fetch('https://ffpg.bungalou.ca:5433/api/v1/user/register', {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({
-            email: globalEmail, 
-            name: name, 
-            password: globalPassword, 
-            token: token, 
-          }),
+      const data = await response.json();
 
-      })
-
-      if(!response.ok){
-        throw new Error(`Response status: ${response.status}`);
+      if (!response.ok) {
+        alert("Error: " + data.error);
+        return;
       }
-      const result = await response.json();
-      console.log(result);
 
+      alert("Account created!");
+      window.location.href = "/login";    // 🔥 redirect
+    } 
+    catch (error) {
+      console.error(error);
+      alert("Something went wrong.");
     }
-    catch(error){
-        console.error(error.message); 
-    }
-  }
+  };
 
   return (
     <div className="min-h-screen flex items-center justify-center bg-white text-black px-4">
@@ -54,33 +56,28 @@ export default function SignUpPage() {
         <h1 className="text-3xl sm:text-4xl font-bold text-center mb-6 sm:mb-8 tracking-tight">
           Sign up
         </h1>
-        <form className="flex flex-col space-y-5 sm:space-y-6">
-          <input
-            type="email"
-            ref={email}
-            placeholder="Email"
-            className="border border-black rounded-lg px-4 py-3 bg-transparent text-sm sm:text-base outline-none focus:outline-none focus:ring-0 focus:border-black"
-          />
-          <input
-            type="password"
-            ref={password}
-            placeholder="Password"
-            className="border border-black rounded-lg px-4 py-3 bg-transparent text-sm sm:text-base outline-none focus:outline-none focus:ring-0 focus:border-black"
-          />
-          <button
-            type="submit"
-            onClick={handleSubmit} //for forms, it's onSubmit
-            className="border border-black rounded-lg py-3 font-semibold text-sm sm:text-base hover:bg-black hover:text-white transition cursor-pointer"
-          >
-            Connect
+
+        <form className="flex flex-col space-y-5 sm:space-y-6" onSubmit={handleSubmit}>
+          
+          <input ref={email} type="email" placeholder="Email" className="border border-black rounded-lg px-4 py-3" />
+          <input ref={userName} type="text" placeholder="Username" className="border border-black rounded-lg px-4 py-3" />
+          <input ref={firstName} type="text" placeholder="First Name" className="border border-black rounded-lg px-4 py-3" />
+          <input ref={lastName} type="text" placeholder="Last Name" className="border border-black rounded-lg px-4 py-3" />
+          <input ref={password} type="password" placeholder="Password" className="border border-black rounded-lg px-4 py-3" />
+
+          <button type="submit" className="border border-black rounded-lg py-3 font-semibold hover:bg-black hover:text-white cursor-pointer">
+            Sign Up
           </button>
+
         </form>
+
         <p className="text-center text-xs sm:text-sm mt-6 sm:mt-8">
           Have an account?{" "}
           <a href="/login" className="underline hover:opacity-70">
             Login
           </a>
         </p>
+
       </div>
     </div>
   );

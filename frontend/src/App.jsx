@@ -6,7 +6,7 @@ import View from 'ol/View';
 import TileLayer from 'ol/layer/Tile';
 import OSM from 'ol/source/OSM';
 import 'ol/ol.css'; 
-import './app.css';
+import './App.css';
 
 import { fromLonLat } from 'ol/proj';
 
