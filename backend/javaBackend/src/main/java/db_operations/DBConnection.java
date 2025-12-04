@@ -1,5 +1,6 @@
 package db_operations;
 
+import ranking.ChoiceOptions;
 import security.Password;
 
 import java.io.BufferedReader;
@@ -188,6 +189,11 @@ public class DBConnection {
         }
 
         return resList;
+    }
+
+    //
+    public static void addOptionChoice(ChoiceOptions options) {
+
     }
 
 //    public boolean addUser(String username, Password hashedPassword) {

@@ -51,47 +51,47 @@ public class UserRegisterUserHandler implements HttpHandler {
             }
 
             //TODO: Implement adduser
-            dbRestauraunt recommended = User.getRecommendation(
-                    result.currentLocation().latitude(),
-                    result.currentLocation().longitude(),
-                    result.radius(),
-                    result.preferences());
-
-            // formulate response json
-            JsonObject response = new JsonObject();
-            JsonObject location = new JsonObject();
-            location.addProperty("latitude", recommended.latitude());
-            location.addProperty("longitude", recommended.longitude());
-            response.addProperty("name", recommended.name());
-            response.addProperty("image", "null");
-            response.add("location", location);
-
-            // convert json to response text
-            String responseString = response.toString();
-
-            // add cors headers
-            httpExchange.getResponseHeaders().add("Content-Type", "application/json");
-            httpExchange.getResponseHeaders().add("Access-Control-Allow-Origin", "*");
-            httpExchange.getResponseHeaders().add("Access-Control-Allow-Headers", "*");
-            httpExchange.getResponseHeaders().add("Access-Control-Allow-Methods", "GET, POST, PUT, DELETE, OPTIONS");
-            httpExchange.sendResponseHeaders(200, responseString.length());
-
-            // write response
-            OutputStream os = httpExchange.getResponseBody();
-            os.write(responseString.getBytes());
-            os.close();
+//            dbRestauraunt recommended = User.getRecommendation(
+//                    result.currentLocation().latitude(),
+//                    result.currentLocation().longitude(),
+//                    result.radius(),
+//                    result.preferences());
+//
+//            // formulate response json
+//            JsonObject response = new JsonObject();
+//            JsonObject location = new JsonObject();
+//            location.addProperty("latitude", recommended.latitude());
+//            location.addProperty("longitude", recommended.longitude());
+//            response.addProperty("name", recommended.name());
+//            response.addProperty("image", "null");
+//            response.add("location", location);
+//
+//            // convert json to response text
+//            String responseString = response.toString();
+//
+//            // add cors headers
+//            httpExchange.getResponseHeaders().add("Content-Type", "application/json");
+//            httpExchange.getResponseHeaders().add("Access-Control-Allow-Origin", "*");
+//            httpExchange.getResponseHeaders().add("Access-Control-Allow-Headers", "*");
+//            httpExchange.getResponseHeaders().add("Access-Control-Allow-Methods", "GET, POST, PUT, DELETE, OPTIONS");
+//            httpExchange.sendResponseHeaders(200, responseString.length());
+//
+//            // write response
+//            OutputStream os = httpExchange.getResponseBody();
+//            os.write(responseString.getBytes());
+//            os.close();
 
         } else if (requestedMethod.equals("OPTIONS")){
-            // handle preflight options
-            httpExchange.getResponseHeaders().add("Allowed", "");
-            httpExchange.getResponseHeaders().add("Access-Control-Allow-Origin", "*");
-            httpExchange.getResponseHeaders().add("Access-Control-Allow-Headers", "*");
-            httpExchange.getResponseHeaders().add("Access-Control-Allow-Methods", "GET, POST, PUT, DELETE, OPTIONS");
-            httpExchange.sendResponseHeaders(204, -1);
+//            // handle preflight options
+//            httpExchange.getResponseHeaders().add("Allowed", "");
+//            httpExchange.getResponseHeaders().add("Access-Control-Allow-Origin", "*");
+//            httpExchange.getResponseHeaders().add("Access-Control-Allow-Headers", "*");
+//            httpExchange.getResponseHeaders().add("Access-Control-Allow-Methods", "GET, POST, PUT, DELETE, OPTIONS");
+//            httpExchange.sendResponseHeaders(204, -1);
         } else {
-            System.err.println("Wrong method for this path!");
-            System.err.println("Method Requested: " + requestedMethod);
-            httpExchange.sendResponseHeaders(403,0);
+//            System.err.println("Wrong method for this path!");
+//            System.err.println("Method Requested: " + requestedMethod);
+//            httpExchange.sendResponseHeaders(403,0);
         }
     }
 }

@@ -21,6 +21,7 @@ public class Server {
             throw new RuntimeException("Server.Server Creation failed");
         }
         server.createContext("/api/v1/restauraunt/recommend-guest", new RecommendGuestHandler());
+        server.createContext("/api/v1/rank/choice", new GetChoiceHandler());
         server.setExecutor(Executors.newSingleThreadExecutor());
     }
 

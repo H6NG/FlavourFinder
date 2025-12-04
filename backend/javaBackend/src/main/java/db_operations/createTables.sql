@@ -55,6 +55,14 @@ CREATE TABLE choices (
 	timeChose		timestamptz
 );
 
+CREATE TABLE choiceoffering (
+	offeringID		uuid PRIMARY KEY,
+	rest1ID			int REFERENCES restauraunt (restID) NOT NULL,
+	rest2ID			int REFERENCES restauraunt (restID) NOT NULL,
+	rest3ID			int REFERENCES restauraunt (restID),
+	timeOfferd		timestamptz NOT NULL
+);
+
 ALTER TABLE users ALTER COLUMN salt DROP NOT NULL;
 ALTER TABLE restauraunt ALTER COLUMN osmid TYPE BIGINT;
 
