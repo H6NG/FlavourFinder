@@ -14,6 +14,7 @@ import NavBar from "./component/navbar";
 import SettingsPage from "./Settings.jsx";
 import HistoryPage from "./getHistory.jsx";
 import RatePage from "./Rate.jsx";
+import FeedPage from "./Feed.jsx";   // <-- Feed only
 import useFind from "./Find.jsx";
 
 export default function App() {
@@ -21,11 +22,11 @@ export default function App() {
   const mapInstanceRef = useRef(null);
   const viewRef = useRef(null);
 
-  // "map", "settings", or "history"
+  // pages: map, feed, rate, history, settings
   const [currentPage, setCurrentPage] = useState("map");
 
   // -----------------------------------------
-  // Mount the OpenLayers map ONCE
+  // Mount map
   // -----------------------------------------
   useEffect(() => {
     if (!mapRef.current) return;
@@ -48,19 +49,12 @@ export default function App() {
     return () => map.setTarget(undefined);
   }, []);
 
-  // Find functionality (GPS + cookies)
   const runFind = useFind(mapInstanceRef, viewRef);
 
-  // -----------------------------------------
-  // Always call runFind ONLY AFTER map is visible
-  // -----------------------------------------
   useEffect(() => {
     if (currentPage === "map") {
       setTimeout(() => {
-        if (mapInstanceRef.current) {
-          mapInstanceRef.current.updateSize();
-          console.log("MAP SIZE BEFORE FIND =", mapInstanceRef.current.getSize());
-        }
+        mapInstanceRef.current?.updateSize();
         runFind();
       }, 120);
     }
@@ -70,10 +64,25 @@ export default function App() {
     <>
       <NavBar
         onFind={() => setCurrentPage("map")}
+        onFeed={() => setCurrentPage("feed")}
+        onRate={() => setCurrentPage("rate")}
         onHistory={() => setCurrentPage("history")}
         onSettings={() => setCurrentPage("settings")}
-        onRate={() => setCurrentPage("rate")} 
       />
+
+      {/* FEED PAGE */}
+      {currentPage === "feed" && (
+        <div className="content-container">
+          <FeedPage />
+        </div>
+      )}
+
+      {/* RATE PAGE */}
+      {currentPage === "rate" && (
+        <div className="content-container">
+          <RatePage />
+        </div>
+      )}
 
       {/* HISTORY PAGE */}
       {currentPage === "history" && (
@@ -88,13 +97,6 @@ export default function App() {
           <SettingsPage />
         </div>
       )}
-
-      {currentPage === "rate" && (
-        <div className="content-container">
-          <RatePage />
-        </div>
-      )}
-
 
       {/* MAP PAGE */}
       {currentPage === "map" && (
