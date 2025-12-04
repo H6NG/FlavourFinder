@@ -4,7 +4,6 @@ import com.sun.net.httpserver.*;
 
 import java.io.IOException;
 import java.net.InetSocketAddress;
-import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
 public class Server {
@@ -21,7 +20,7 @@ public class Server {
             throw new RuntimeException("Server.Server Creation failed");
         }
         server.createContext("/api/v1/restauraunt/recommend-guest", new RecommendGuestHandler());
-        server.createContext("/api/v1/rank/choice", new GetChoiceHandler());
+        server.createContext("/api/v1/rank/choice", new ChoiceHandler());
         server.setExecutor(Executors.newSingleThreadExecutor());
     }
 

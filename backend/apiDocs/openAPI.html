@@ -915,15 +915,15 @@ ul.nav-tabs {
     defs["restaurauntChoiceResponse"] = {
   "properties" : {
     "choiceA" : {
-      "type" : "number",
+      "type" : "boolean",
       "nullable" : false
     },
     "choiceB" : {
-      "type" : "number",
+      "type" : "boolean",
       "nullable" : false
     },
     "choiceC" : {
-      "type" : "number",
+      "type" : "boolean",
       "nullable" : false
     },
     "offeringID" : {
@@ -1158,7 +1158,7 @@ ul.nav-tabs {
                             <pre class="prettyprint"><code class="language-bsh">curl -X GET \
  -H "Authorization: Bearer [[accessToken]]" \
  -H "Accept: application/json" \
- "http://localhost/api/v1/user/refresh"
+ "http://localhost:8000/api/v1/user/refresh"
 </code></pre>
                           </div>
                           <div class="tab-pane" id="examples-Auth-refreshToken-0-java">
@@ -1513,7 +1513,7 @@ pub fn main() {
                           <div class="tab-pane active" id="examples-Rank-getChoices-0-curl">
                             <pre class="prettyprint"><code class="language-bsh">curl -X GET \
  -H "Accept: application/json" \
- "http://localhost/api/v1/rank/choice?latitude=8.14&longitude=8.14"
+ "http://localhost:8000/api/v1/rank/choice?latitude=8.14&longitude=8.14"
 </code></pre>
                           </div>
                           <div class="tab-pane" id="examples-Rank-getChoices-0-java">
@@ -1913,7 +1913,7 @@ Longitude of the user&#39;s location
                             <pre class="prettyprint"><code class="language-bsh">curl -X POST \
  -H "Accept: application/json" \
  -H "Content-Type: application/json" \
- "http://localhost/api/v1/rank/choice" \
+ "http://localhost:8000/api/v1/rank/choice" \
  -d ''
 </code></pre>
                           </div>
@@ -2306,7 +2306,7 @@ $(document).ready(function() {
                             <pre class="prettyprint"><code class="language-bsh">curl -X POST \
  -H "Accept: application/json" \
  -H "Content-Type: application/json" \
- "http://localhost/api/v1/restauraunt/recommend-guest" \
+ "http://localhost:8000/api/v1/restauraunt/recommend-guest" \
  -d ''
 </code></pre>
                           </div>
@@ -2697,7 +2697,7 @@ $(document).ready(function() {
  -H "Authorization: Bearer [[accessToken]]" \
  -H "Accept: application/json" \
  -H "Content-Type: application/json" \
- "http://localhost/api/v1/restauraunt/recommend" \
+ "http://localhost:8000/api/v1/restauraunt/recommend" \
  -d ''
 </code></pre>
                           </div>
@@ -3115,7 +3115,7 @@ $(document).ready(function() {
  -H "Authorization: Bearer [[accessToken]]" \
  -H "Accept: application/json" \
  -H "Content-Type: application/json" \
- "http://localhost/api/v1/user/changepassword" \
+ "http://localhost:8000/api/v1/user/changepassword" \
  -d ''
 </code></pre>
                           </div>
@@ -3529,7 +3529,7 @@ $(document).ready(function() {
                             <pre class="prettyprint"><code class="language-bsh">curl -X DELETE \
  -H "Authorization: Bearer [[accessToken]]" \
  -H "Content-Type: application/json" \
- "http://localhost/api/v1/user/self" \
+ "http://localhost:8000/api/v1/user/self" \
  -d ''
 </code></pre>
                           </div>
@@ -3922,7 +3922,7 @@ $(document).ready(function() {
                             <pre class="prettyprint"><code class="language-bsh">curl -X GET \
  -H "Authorization: Bearer [[accessToken]]" \
  -H "Accept: application/json" \
- "http://localhost/api/v1/user/preferences"
+ "http://localhost:8000/api/v1/user/preferences"
 </code></pre>
                           </div>
                           <div class="tab-pane" id="examples-User-getPreferences-0-java">
@@ -4275,7 +4275,7 @@ pub fn main() {
                             <pre class="prettyprint"><code class="language-bsh">curl -X GET \
  -H "Authorization: Bearer [[accessToken]]" \
  -H "Accept: application/json" \
- "http://localhost/api/v1/user/self"
+ "http://localhost:8000/api/v1/user/self"
 </code></pre>
                           </div>
                           <div class="tab-pane" id="examples-User-getUserSelf-0-java">
@@ -4627,7 +4627,7 @@ pub fn main() {
                           <div class="tab-pane active" id="examples-User-registerUser-0-curl">
                             <pre class="prettyprint"><code class="language-bsh">curl -X POST \
  -H "Content-Type: application/json" \
- "http://localhost/api/v1/user/register" \
+ "http://localhost:8000/api/v1/user/register" \
  -d ''
 </code></pre>
                           </div>
@@ -4996,7 +4996,7 @@ $(document).ready(function() {
                             <pre class="prettyprint"><code class="language-bsh">curl -X PUT \
  -H "Authorization: Bearer [[accessToken]]" \
  -H "Content-Type: application/json" \
- "http://localhost/api/v1/user/preferences" \
+ "http://localhost:8000/api/v1/user/preferences" \
  -d ''
 </code></pre>
                           </div>
@@ -5390,7 +5390,7 @@ $(document).ready(function() {
  -H "Authorization: Bearer [[accessToken]]" \
  -H "Accept: application/json" \
  -H "Content-Type: application/json" \
- "http://localhost/api/v1/user/self" \
+ "http://localhost:8000/api/v1/user/self" \
  -d ''
 </code></pre>
                           </div>
@@ -5804,7 +5804,7 @@ $(document).ready(function() {
                             <pre class="prettyprint"><code class="language-bsh">curl -X POST \
  -H "Accept: application/json" \
  -H "Content-Type: application/json" \
- "http://localhost/api/v1/user/login" \
+ "http://localhost:8000/api/v1/user/login" \
  -d ''
 </code></pre>
                           </div>
@@ -6194,7 +6194,7 @@ $(document).ready(function() {
                             <pre class="prettyprint"><code class="language-bsh">curl -X POST \
  -H "Authorization: Bearer [[accessToken]]" \
  -H "Content-Type: application/json" \
- "http://localhost/api/v1/user/logout" \
+ "http://localhost:8000/api/v1/user/logout" \
  -d ''
 </code></pre>
                           </div>

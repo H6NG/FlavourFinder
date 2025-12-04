@@ -3,7 +3,9 @@ info:
   version: "1.0.0"
   title: "Flavour Finder API Docs"
   description: "Documentation about API for backend of the service in the openAPI 3.0.0 format"
-
+servers:
+  - url: http://localhost:8000
+  - url: https://javabackend.bungalou.ca
 # used Tags:
 # user, rank, recommend, auth 
 
@@ -388,13 +390,13 @@ components:
       properties:
         choiceA:
           nullable: false
-          type: "number"
+          type: "boolean"
         choiceB:
           nullable: false
-          type: "number"
+          type: "boolean"
         choiceC:
           nullable: false
-          type: "number"
+          type: "boolean"
         offeringID:
           nullable: false
           type: "string"

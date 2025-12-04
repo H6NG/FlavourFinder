@@ -1,7 +1,6 @@
 package db_operations;
 
 import ranking.ChoiceOptions;
-import security.Password;
 
 import java.io.BufferedReader;
 import java.io.FileNotFoundException;
@@ -200,6 +199,47 @@ public class DBConnection {
         insertChoiceOption.setLong(4, options.res3().dbID());
 
         insertChoiceOption.executeUpdate();
+    }
+
+    public static void deleteOfferUUID(UUID uuid) throws SQLException {
+        PreparedStatement deleteWithUUID = connection.prepareStatement(
+                "DELETE FROM choiceoffering WHERE offeringid=?;\n"
+        );
+        deleteWithUUID.setObject(1, uuid);
+        deleteWithUUID.executeUpdate();
+    }
+
+    // int resA, resB, resC is for the order
+    public static void addChoice(UUID uuid, int resA, int resB, int resC, int numChose) throws SQLException {
+        // get restauraunt IDs
+        PreparedStatement getResIDs = connection.prepareStatement(
+                "SELECT rest1id, rest2id, rest3id \n" +
+                        "FROM choiceoffering \n" +
+                        "WHERE offeringid=?"
+        );
+        getResIDs.setObject(1, uuid);
+        ResultSet rs = getResIDs.executeQuery();
+        rs.next();
+        int resAID = rs.getInt("rest1id");
+        int resBID = rs.getInt("rest2id");
+        int resCID = rs.getInt("rest3id");
+
+        System.out.println("Res A: " + resA);
+        System.out.println("Res B: " + resB);
+        System.out.println("Res C: " + resC);
+
+        PreparedStatement addChoice = connection.prepareStatement(
+                "INSERT INTO choices (rest1id, rest2id, rest3id, numchose, timechose) VALUES\n" +
+                        "(?, ?, ?, ?, CURRENT_TIMESTAMP);"
+        );
+        addChoice.setInt(resA + 1, resAID);
+        addChoice.setInt(resB + 1, resBID);
+        addChoice.setInt(resC + 1, resCID);
+        addChoice.setInt(4, numChose);
+        addChoice.executeUpdate();
+
+        // delete from choice offered
+        deleteOfferUUID(uuid);
     }
 
 //    public boolean addUser(String username, Password hashedPassword) {

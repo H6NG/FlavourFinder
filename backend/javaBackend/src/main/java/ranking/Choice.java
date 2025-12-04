@@ -1,5 +1,6 @@
 package ranking;
 
+import Server.ResponseRequestClasses.restaurauntChoiceResponsePost;
 import db_operations.DBConnection;
 import db_operations.dbRestauraunt;
 
@@ -59,5 +60,45 @@ public class Choice {
         }
         return returnOpts;
 
+    }
+
+    public static void importChoice(restaurauntChoiceResponsePost response) {
+        UUID responseUUID = response.offeringID();
+
+        // if it is all false or all true, then it isn't valid
+        if (response.choiceA() == response.choiceB() && response.choiceB() == response.choiceC()) {
+            // delete record from choice offered
+            try {
+                DBConnection.deleteOfferUUID(responseUUID);
+            } catch (SQLException e) {
+                System.err.println("Error deleting offer with UUID: " +  responseUUID.toString());
+                throw new RuntimeException(e);
+            }
+            return;
+        }
+
+        int numChosen = (response.choiceA() ? 1 : 0) +
+                        (response.choiceB() ? 1 : 0) +
+                        (response.choiceC() ? 1 : 0);
+
+        // order the restauraunts are in (index is the order, Character is A B or C)
+        List<Character> resOrder = new ArrayList<>();
+        resOrder.add('A');
+        resOrder.add((response.choiceB() ? 0 : 1),'B');
+        resOrder.add((response.choiceC() ? 0 : 1), 'C');
+
+        try {
+            DBConnection.addChoice(
+                    responseUUID,
+                    resOrder.indexOf('A'),
+                    resOrder.indexOf('B'),
+                    resOrder.indexOf('C'),
+                    numChosen
+            );
+        } catch (SQLException e) {
+            System.err.println("Error adding choice selection to database");
+            System.err.println(e.getMessage());
+            throw new RuntimeException(e);
+        }
     }
 }

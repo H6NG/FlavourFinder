@@ -47,7 +47,7 @@ CREATE TABLE recommendHistory (
 
 CREATE TABLE choices (
 	choiceID		SERIAL PRIMARY KEY,
-	userID			int REFERENCES users (userID) NOT NULL,
+	userID			int REFERENCES users (userID),
 	rest1ID			int REFERENCES restauraunt (restID) NOT NULL,
 	rest2ID			int REFERENCES restauraunt (restID) NOT NULL,
 	rest3ID			int REFERENCES restauraunt (restID),
@@ -63,7 +63,7 @@ CREATE TABLE choiceoffering (
 	timeOfferd		timestamptz NOT NULL
 );
 
-ALTER TABLE users ALTER COLUMN salt DROP NOT NULL;
+ALTER TABLE choices ALTER COLUMN userid DROP NOT NULL;
 ALTER TABLE restauraunt ALTER COLUMN osmid TYPE BIGINT;
 
 SELECT * FROM users;
