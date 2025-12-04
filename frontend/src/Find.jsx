@@ -1,40 +1,64 @@
-// Find.jsx — Leaflet map inside this file
-import React, { useEffect } from "react";
-import { MapContainer, TileLayer, useMap } from "react-leaflet";
+// Find.jsx — Leaflet map using real GPS (fallback → UBC)
+import React, { useEffect, useRef } from "react";
+import L from "leaflet";
 import "leaflet/dist/leaflet.css";
 
-// UBC location
+import { getUserLocation } from "./utility/getUserLocation.js";
+
+// Default fallback location
 const UBC_LAT = 49.2606;
 const UBC_LON = -123.2460;
 
-// This small internal component recenters the map when Find is clicked
-function RecenterOnFind({ trigger }) {
-  const map = useMap();
+export default function FindPage() {
+  const mapRef = useRef(null);
+  const mapInstance = useRef(null);
 
   useEffect(() => {
-    if (trigger > 0) {
-      console.log("Re-centering map to UBC…");
-      map.setView([UBC_LAT, UBC_LON], 15);
+    if (!mapRef.current) return;
+    if (mapInstance.current) return; // Prevent multiple maps
+
+    async function createMap() {
+      let lat = UBC_LAT;
+      let lon = UBC_LON;
+
+      // --------------------------
+      // Try real user GPS location
+      // --------------------------
+      try {
+        console.log("Requesting GPS...");
+        const pos = await getUserLocation();
+        lat = pos.lat;
+        lon = pos.lon;
+        console.log("GPS SUCCESS →", lat, lon);
+      } catch (err) {
+        console.warn("GPS FAILED → USING UBC:", err);
+      }
+
+      // --------------------------
+      // Initialize Leaflet map
+      // --------------------------
+      mapInstance.current = L.map(mapRef.current, {
+        zoomControl: false, // remove +/-
+      }).setView([lat, lon], 15);
+
+      L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png", {
+        maxZoom: 19,
+        attribution: "",
+      }).addTo(mapInstance.current);
+
+      // Marker on location
+      L.marker([lat, lon])
+        .addTo(mapInstance.current)
+        .bindPopup(lat === UBC_LAT ? "UBC (Fallback)" : "You are here")
+        .openPopup();
     }
-  }, [trigger]);
 
-  return null;
-}
+    createMap();
+  }, []);
 
-export default function Find({ trigger }) {
   return (
-    <MapContainer
-      center={[UBC_LAT, UBC_LON]}
-      zoom={14}
-      style={{ width: "100%", height: "100%" }}
-    >
-      <TileLayer
-        url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
-        attribution="© OpenStreetMap"
-      />
-
-      {/* Recenter when user clicks Find */}
-      <RecenterOnFind trigger={trigger} />
-    </MapContainer>
+    <div style={{ width: "100%", height: "100%", position: "relative" }}>
+      <div ref={mapRef} style={{ width: "100%", height: "100%" }} />
+    </div>
   );
 }
