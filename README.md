@@ -18,4 +18,20 @@ We aim to inspire people to explore new dining experiences and uncover the stori
 
 [Flavour Finder Website](https://c2tp.onrender.com/)
 
+## System Requirement 
+
+1. Git
+2. Node.js
+3. npm (it comes with Node.js package I believe)
+4. Python 3.9+ recommended
+5. pip (it comes with Python package I believe)
+
+## Instructions / Installement
+
+1. Access backend folder 
+`cd backend`
+
+2. To install the requirement in the backend
+`pip install -r requirements.txt`
+
 **Notice:** This project was developed as part of the UBC-V CPEN 221 group project.
