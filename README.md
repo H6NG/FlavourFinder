@@ -65,7 +65,7 @@ on Windows:
 venv\Scripts\activate
 ```
 
-2. Create and Activate Python Virtual Environment
+### 3. Create and Activate Python Virtual Environment
 
 ```bash
 python3 -m venv venv
@@ -73,7 +73,7 @@ cd backend-hang
 source venv/bin/activate
 ```
 
-3.  Install Backend Dependencies and Run the Server
+### 4.  Install Backend Dependencies and Run the Server
 
 ```bash 
 cd backend-hang
@@ -81,7 +81,7 @@ pip install -r requirements.txt
 python app.py
 ```
 
-4. Run the frontend with the following: 
+### 5. Run the frontend with the following: 
 
 ```bash
 cd frontend 
@@ -89,13 +89,13 @@ npm install
 npm run dev
 ```
 
-5. Access the website (a link would be provided when doing localhost)
+### 6. Access the website (a link would be provided when doing localhost)
 
 - usually it's http://localhost:5173/
 
 ---
 
-Project Structure
+## Project Structure
 
 ```bash
 project-root/
