@@ -42,45 +42,52 @@ This project is a full-stack web application consisting of a Python backend and 
 ```bash
 git clone <your-repository-url>
 cd <your-repository-name>
-
+```
 
 ## Instructions / Installement
 
-1. Create your own .venv 
+### 2. Create your own .venv 
 
 - you would need to create a database+collection on MangoDB
 - Then, create a .venv file by copy-pasting the following code: 
 
 on Mac: 
 
-
+```bash
 cd backend-hang
 python3 -m venv venv
 source venv/bin/activate
-
+```
 
 on Windows: 
 
+```bash
 venv\Scripts\activate
-
+```
 
 2. Create and Activate Python Virtual Environment
 
+```bash
 python3 -m venv venv
 cd backend-hang 
 source venv/bin/activate
+```
 
 3.  Install Backend Dependencies and Run the Server
+
 ```bash 
 cd backend-hang
 pip install -r requirements.txt
 python app.py
+```
 
 4. Run the frontend with the following: 
 
+```bash
 cd frontend 
 npm install 
 npm run dev
+```
 
 5. Access the website (a link would be provided when doing localhost)
 
@@ -89,6 +96,8 @@ npm run dev
 ---
 
 Project Structure
+
+```bash
 project-root/
 │
 ├── backend-hang/
@@ -101,5 +110,6 @@ project-root/
 │   └── src/
 │
 └── README.md
+```
 
 **Notice:** This project was developed as part of the UBC-V CPEN 221 group project.
