@@ -29,9 +29,11 @@ We aim to inspire people to explore new dining experiences and uncover the stori
 ## Instructions / Installement
 
 1. Access backend folder 
+
 `cd backend`
 
 2. To install the requirement in the backend
+
 `pip install -r requirements.txt`
 
 **Notice:** This project was developed as part of the UBC-V CPEN 221 group project.
