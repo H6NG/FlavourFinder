@@ -30,7 +30,7 @@ We aim to inspire people to explore new dining experiences and uncover the stori
 
 1. Access backend folder 
 
-`cd backend`
+``cd backend``
 
 2. To install the requirement in the backend
 
