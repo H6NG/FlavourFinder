@@ -18,6 +18,13 @@ We aim to inspire people to explore new dining experiences and uncover the stori
 
 [Flavour Finder Website](https://c2tp.onrender.com/)
 
+---
+
+## Description
+This project is a full-stack web application consisting of a Python backend and a JavaScript frontend. It is designed to demonstrate server-client interaction, database integration, and modern development workflows.
+
+---
+
 ## System Requirement 
 
 1. Git
@@ -26,14 +33,73 @@ We aim to inspire people to explore new dining experiences and uncover the stori
 4. Python 3.9+ recommended
 5. pip (it comes with Python package I believe)
 
+---
+
+## Installation & Setup
+
+### 1. Clone the Repository
+
+```bash
+git clone <your-repository-url>
+cd <your-repository-name>
+
+
 ## Instructions / Installement
 
-1. Access backend folder 
+1. Create your own .venv 
 
-```bash cd backend``
+- you would need to create a database+collection on MangoDB
+- Then, create a .venv file by copy-pasting the following code: 
 
-2. To install the requirement in the backend
+on Mac: 
 
-`pip install -r requirements.txt`
+
+cd backend-hang
+python3 -m venv venv
+source venv/bin/activate
+
+
+on Windows: 
+
+venv\Scripts\activate
+
+
+2. Create and Activate Python Virtual Environment
+
+python3 -m venv venv
+cd backend-hang 
+source venv/bin/activate
+
+3.  Install Backend Dependencies and Run the Server
+```bash 
+cd backend-hang
+pip install -r requirements.txt
+python app.py
+
+4. Run the frontend with the following: 
+
+cd frontend 
+npm install 
+npm run dev
+
+5. Access the website (a link would be provided when doing localhost)
+
+- usually it's http://localhost:5173/
+
+---
+
+Project Structure
+project-root/
+│
+├── backend-hang/
+│   ├── app.py
+│   ├── requirements.txt
+│   └── venv/
+│
+├── frontend/
+│   ├── package.json
+│   └── src/
+│
+└── README.md
 
 **Notice:** This project was developed as part of the UBC-V CPEN 221 group project.
